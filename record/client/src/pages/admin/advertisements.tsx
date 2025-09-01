@@ -146,22 +146,22 @@ export default function AdminAdvertisements() {
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <Select value={filters.country} onValueChange={v => setFilters({ ...filters, country: v, page: 1 })}>
+            <Select value={filters.country} onValueChange={v => setFilters({ ...filters, country: v === 'ALL' ? '' : v, page: 1 })}>
               <SelectTrigger className="w-40"><SelectValue placeholder="Country" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="ALL">All</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.state} onValueChange={v => setFilters({ ...filters, state: v, page: 1 })}>
+            <Select value={filters.state} onValueChange={v => setFilters({ ...filters, state: v === 'ALL' ? '' : v, page: 1 })}>
               <SelectTrigger className="w-40"><SelectValue placeholder="State" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="ALL">All</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.city} onValueChange={v => setFilters({ ...filters, city: v, page: 1 })}>
+            <Select value={filters.city} onValueChange={v => setFilters({ ...filters, city: v === 'ALL' ? '' : v, page: 1 })}>
               <SelectTrigger className="w-40"><SelectValue placeholder="City" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="ALL">All</SelectItem>
               </SelectContent>
             </Select>
           </div>
