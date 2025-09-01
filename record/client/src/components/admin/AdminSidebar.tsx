@@ -128,12 +128,12 @@ export function AdminSidebar() {
           const isActive = location === item.href || location.startsWith(item.href);
           
           return (
-            <div key={item.href}>
+            <div key={`${item.href}-${item.title}`}>
               <Link to={item.href} data-testid={`link-admin-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
                 <div className={cn(
                   "flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors cursor-pointer",
-                  isActive 
-                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700" 
+                  isActive
+                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
                     : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                 )}>
                   <Icon className="w-4 h-4" />
@@ -144,7 +144,7 @@ export function AdminSidebar() {
               {item.submenu && isActive && (
                 <div className="ml-6 mt-1 space-y-1">
                   {item.submenu.map((subitem) => (
-                    <Link key={subitem.href} to={subitem.href}>
+                    <Link key={`${subitem.href}-${subitem.title}`} to={subitem.href}>
                       <div className="flex items-center space-x-2 px-2 py-1 text-xs text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded">
                         {subitem.title}
                       </div>
