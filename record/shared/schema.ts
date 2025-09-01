@@ -186,7 +186,9 @@ export const updateBannerSchema = insertBannerSchema.partial();
 // Admin schemas
 export const adminUserUpdateSchema = z.object({
   role: z.enum(['user', 'seller', 'admin']).optional(),
-  isVerified: z.boolean().optional()
+  isVerified: z.boolean().optional(),
+  active: z.boolean().optional(),
+  autoApproveAds: z.boolean().optional()
 });
 
 export const adminModerateSchema = z.object({
