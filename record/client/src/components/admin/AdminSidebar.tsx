@@ -58,6 +58,7 @@ const sidebarItems = [
     icon: Package,
     submenu: [
       { title: 'Advertisement Listing Package', href: '/admin/packages/listing' },
+      { title: 'Feature Advertisement Package', href: '/admin/packages/featured' },
       { title: 'MO Advertisement Package', href: '/admin/packages' }
     ]
   },
