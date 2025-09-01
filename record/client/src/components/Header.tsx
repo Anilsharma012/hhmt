@@ -68,14 +68,15 @@ export function Header() {
               <span data-testid="text-location">Budha Khera...</span>
             </div>
             
-            {/* User Profile */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-gray-600" />
-              </div>
-              <span className="text-white text-sm font-medium">anil</span>
-            </div>
-            
+            {/* User */}
+            {user ? (
+              <UserDropdown />
+            ) : (
+              <Link to="/login" data-testid="link-login">
+                <Button variant="ghost" className="text-white hover:text-white/80">Sign in</Button>
+              </Link>
+            )}
+
             {/* Ad Listing Button */}
             <Link to="/post-ad" data-testid="link-post-ad">
               <Button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-sm font-semibold rounded">
