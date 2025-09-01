@@ -48,6 +48,7 @@ import AdminTransactions from "@/pages/admin/packages-transactions";
 import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
 import AdminCustomers from "@/pages/admin/customers";
 import AdminCustomFields from "@/pages/admin/custom-fields";
+import RequestedAdvertisement from "@/pages/admin/requested-advertisement";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
