@@ -23,7 +23,7 @@ export default function AdminFeaturedPackages() {
   const [page, setPage] = useState(1); const limit = 10;
   const [editing, setEditing] = useState<any | null>(null);
 
-  const { data, isLoading, isRefetching } = useQuery({ queryKey: ['/api/admin/packages'] });
+  const { data, isLoading, isRefetching } = useQuery({ queryKey: ['/api/admin/packages'], enabled: !!user && user.role === 'admin' });
   const all = (data as any)?.data || [];
   const featuredOnly = useMemo(() => all.filter((p: any) => p?.features?.featured === true), [all]);
   const filtered = useMemo(() => featuredOnly.filter((p: any) => !dSearch || p.name.toLowerCase().includes(dSearch.toLowerCase())), [featuredOnly, dSearch]);
