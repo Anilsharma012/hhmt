@@ -30,7 +30,7 @@ export default function AdminCategories() {
   const [subs, setSubs] = useState<any[]>([]);
   const [counts, setCounts] = useState<Record<string, { sub: number; ads: number }>>({});
 
-  const { data, isLoading, isRefetching } = useQuery({ queryKey: ['/api/admin/categories', { search: dSearch }], enabled: !!user && user.role === 'admin' });
+  const { data, isLoading, isRefetching } = useQuery({ queryKey: ['/api/admin/categories', { search: dSearch }], enabled: !!user && user.role === 'admin', onError:(e:any)=>{ if(String(e?.message||'').startsWith('401')){ setLocation('/admin/login'); } } });
   const raw = (data as any)?.data || [];
   const filtered = useMemo(() => raw.filter((c: any) => !dSearch || c.name.toLowerCase().includes(dSearch.toLowerCase())), [raw, dSearch]);
   const pages = Math.max(1, Math.ceil(filtered.length / limit));
