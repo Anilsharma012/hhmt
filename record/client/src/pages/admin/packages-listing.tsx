@@ -23,7 +23,8 @@ export default function AdminListingPackages(){
   const [page,setPage]=useState(1); const limit=10;
   const [editing,setEditing]=useState<any|null>(null);
 
-  const { data, isLoading, isRefetching } = useQuery({ queryKey: ['/api/admin/packages'], enabled: !!user && user.role === 'admin' });
+  const [, setLocation] = useLocation();
+  const { data, isLoading, isRefetching } = useQuery({ queryKey: ['/api/admin/packages'], enabled: !!user && user.role === 'admin', onError:(e:any)=>{ if(String(e?.message||'').startsWith('401')){ setLocation('/admin/login'); } } });
   const all = (data as any)?.data || [];
   const filtered = useMemo(()=> all.filter((p:any)=>!dSearch||p.name.toLowerCase().includes(dSearch.toLowerCase())),[all,dSearch]);
   const pages = Math.max(1, Math.ceil(filtered.length/limit)); const rows = filtered.slice((page-1)*limit, page*limit);
