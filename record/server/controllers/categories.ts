@@ -68,10 +68,17 @@ export const deleteCategory = async (req: Request, res: Response) => {
 };
 
 export const createSubcategory = async (req: Request, res: Response) => {
-  const { categoryId, name, slug } = req.body || {};
-  const sub = new Subcategory({ categoryId, name, slug, isActive: true });
-  await sub.save();
-  res.status(201).json({ ok: true, data: sub });
+  try {
+    const { categoryId, name, slug } = req.body || {};
+    if (!name || !slug) {
+      return res.status(400).json({ ok: false, message: 'name and slug are required' });
+    }
+    const sub = new Subcategory({ categoryId, name, slug, isActive: true });
+    await sub.save();
+    res.status(201).json({ ok: true, data: sub });
+  } catch (error: any) {
+    res.status(400).json({ ok: false, message: error.message });
+  }
 };
 
 export const updateSubcategory = async (req: Request, res: Response) => {
