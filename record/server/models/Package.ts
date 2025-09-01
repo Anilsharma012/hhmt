@@ -2,6 +2,14 @@ import mongoose from 'mongoose';
 
 const packageSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  iosProductId: { type: String, default: '' },
+  price: { type: Number, default: 0 },
+  discountPercent: { type: Number, default: 0 },
+  finalPrice: { type: Number, default: 0 },
+  image: { type: String, default: '' },
+  description: { type: String, default: '' },
+  days: { type: Number, default: null },
+  adLimit: { type: Number, default: null },
   features: {
     featured: { type: Boolean, default: false },
     urgent: { type: Boolean, default: false },
