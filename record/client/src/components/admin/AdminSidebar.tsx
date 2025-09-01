@@ -39,6 +39,11 @@ const sidebarItems = [
     icon: Tag
   },
   {
+    title: 'Custom Fields',
+    href: '/admin/custom-fields',
+    icon: Edit3
+  },
+  {
     title: 'Advertisement Management',
     href: '/admin/advertisements',
     icon: FileText,
