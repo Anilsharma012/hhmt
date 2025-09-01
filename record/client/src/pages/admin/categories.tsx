@@ -38,8 +38,8 @@ export default function AdminCategories() {
 
   useEffect(() => { setPage(1); }, [dSearch]);
   useEffect(() => { (async () => { // counts for current page
-    const subPairs = await Promise.all(rows.map(async (c: any) => { const r = await fetch(`/api/admin/subcategories?categoryId=${c._id}`, { credentials: 'include' }); const j = await r.json(); return [c._id, (j?.data || []).length] as const; }));
-    const adPairs = await Promise.all(rows.map(async (c: any) => { const r = await fetch(`/api/admin/listings?categoryId=${c._id}&limit=1000`, { credentials: 'include' }); const j = await r.json(); return [c._id, (j || []).length] as const; }));
+    const subPairs = await Promise.all(rows.map(async (c: any) => { const r = await fetch(`/api/categories/${c._id}/subcategories`); const j = await r.json(); return [c._id, (j || []).length] as const; }));
+    const adPairs = await Promise.all(rows.map(async (c: any) => { const r = await fetch(`/api/listings?category=${c._id}&limit=1`); const j = await r.json(); return [c._id, Number(j?.pagination?.total || 0)] as const; }));
     const next: Record<string, { sub: number; ads: number }> = {}; subPairs.forEach(([id, n]) => { next[id] = { sub: n, ads: 0 }; }); adPairs.forEach(([id, n]) => { next[id] = { ...(next[id]||{sub:0,ads:0}), ads: n }; }); setCounts(p => ({ ...p, ...next })); })(); }, [rows.map(r => r._id).join(',')]);
 
   const putCat = useMutation({ mutationFn: async ({ id, body }: { id: string; body: any }) => (await apiRequest('PUT', `/api/admin/categories/${id}`, body)).json(), onError: (e: any) => toast({ title: 'Update failed', description: e.message, variant: 'destructive' }), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['/api/admin/categories'] }) });
