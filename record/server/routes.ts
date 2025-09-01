@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import cookieParser from 'cookie-parser';
-import { connectToDatabase } from './utils/database';
+import { connectToDatabase, isDatabaseConnected } from './utils/database';
 import { seedDatabase } from './utils/seedData';
 import { initRealtime } from './realtime';
 
@@ -33,7 +33,9 @@ import { authenticate, requireAdmin } from './middleware/auth';
 export async function registerRoutes(app: Express): Promise<Server> {
   // Connect to database
   await connectToDatabase();
-  await seedDatabase();
+  if (isDatabaseConnected()) {
+    await seedDatabase();
+  }
 
   // Middleware
   app.use(cookieParser());
