@@ -90,6 +90,7 @@ function Router() {
       <Route path="/admin/ads" component={AdsManagement} />
       <Route path="/admin/ads/requested" component={RequestedAdvertisement} />
       <Route path="/admin/advertisements" component={AdminAdvertisements} />
+      <Route path="/admin/home/feature-section" component={FeatureSection} />
       <Route path="/admin/users" component={UsersManagement} />
       <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/locations" component={AdminLocations} />
