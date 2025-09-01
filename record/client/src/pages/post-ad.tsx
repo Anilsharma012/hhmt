@@ -63,7 +63,7 @@ export default function PostAd() {
   });
 
   const { data: subcategories } = useQuery({
-    queryKey: ['/api/categories', form.watch('categoryId'), 'subcategories'],
+    queryKey: [form.watch('categoryId') ? `/api/categories/${form.watch('categoryId')}/subcategories` : '/api/categories/none/subcategories'],
     enabled: !!form.watch('categoryId')
   });
 
