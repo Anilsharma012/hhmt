@@ -39,6 +39,7 @@ import AdminSettings from "@/pages/admin/settings";
 import AdminPages from "@/pages/admin/pages";
 import AdminPackages from "@/pages/admin/packages";
 import AdminPricing from "@/pages/admin/pricing";
+import AdminPaymentGateway from "@/pages/admin/payment-gateway";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
@@ -87,6 +88,7 @@ function Router() {
       <Route path="/admin/pages" component={AdminPages} />
       <Route path="/admin/packages" component={AdminPackages} />
       <Route path="/admin/pricing" component={AdminPricing} />
+      <Route path="/admin/payment-gateway" component={AdminPaymentGateway} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={ChatThreadPage} />
