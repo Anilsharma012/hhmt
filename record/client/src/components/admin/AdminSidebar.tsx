@@ -49,7 +49,8 @@ const sidebarItems = [
     icon: FileText,
     submenu: [
       { title: 'Advertisement', href: '/admin/advertisements' },
-      { title: 'Advertisement Listing', href: '/admin/advertisements' }
+      { title: 'Advertisement Listing', href: '/admin/advertisements' },
+      { title: 'Requested Advertisement', href: '/admin/ads/requested' }
     ]
   },
   {
