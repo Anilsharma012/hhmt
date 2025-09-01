@@ -1,0 +1,119 @@
+import { Switch, Route } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
+import NotFound from "@/pages/not-found";
+import Home from "@/pages/home";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
+import Listings from "@/pages/listings";
+import ListingDetail from "@/pages/listing-detail";
+import PostAd from "@/pages/post-ad";
+import Profile from "@/pages/profile";
+import Dashboard from "@/pages/dashboard";
+import About from "@/pages/about";
+import Contact from "@/pages/contact";
+import Blog from "@/pages/blog";
+import FAQ from "@/pages/faq";
+import Careers from "@/pages/careers";
+import Help from "@/pages/help";
+import Sitemap from "@/pages/sitemap";
+import Legal from "@/pages/legal";
+import Vulnerability from "@/pages/vulnerability";
+import MobileApp from "@/pages/mobile-app";
+import Privacy from "@/pages/privacy";
+import Terms from "@/pages/terms";
+import Location from "@/pages/location";
+import AdminDashboard from "@/pages/admin/dashboard";
+import AdsManagement from "@/pages/admin/ads-management";
+import UsersManagement from "@/pages/admin/users-management";
+import AdminLogin from "@/pages/admin/login";
+import AdminCategories from "@/pages/admin/categories";
+import AdminLocations from "@/pages/admin/locations";
+import AdminReports from "@/pages/admin/reports";
+import AdminNotifications from "@/pages/admin/notifications";
+import AdminAnalytics from "@/pages/admin/analytics";
+import AdminSettings from "@/pages/admin/settings";
+import AdminPages from "@/pages/admin/pages";
+import AdminPackages from "@/pages/admin/packages";
+import AdminPricing from "@/pages/admin/pricing";
+import Notifications from "@/pages/notifications";
+import Chat from "@/pages/chat";
+import Subscription from "@/pages/subscription";
+import MyAds from "@/pages/my-ads";
+import Favorites from "@/pages/favorites";
+import Transactions from "@/pages/transactions";
+import Reviews from "@/pages/reviews";
+import ChatThreadPage from "@/pages/chat-thread";
+
+function Router() {
+  return (
+    <Switch>
+      <Route path="/" component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
+      <Route path="/listings" component={Listings} />
+      <Route path="/listing/:id" component={ListingDetail} />
+      <Route path="/post-ad" component={PostAd} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/dashboard" component={Dashboard} />
+      {/* Public pages */}
+      <Route path="/about" component={About} />
+      <Route path="/contact" component={Contact} />
+      <Route path="/blog" component={Blog} />
+      <Route path="/faq" component={FAQ} />
+      <Route path="/careers" component={Careers} />
+      <Route path="/help" component={Help} />
+      <Route path="/sitemap" component={Sitemap} />
+      <Route path="/legal" component={Legal} />
+      <Route path="/vulnerability" component={Vulnerability} />
+      <Route path="/mobile-app" component={MobileApp} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/location/:slug" component={Location} />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/admin/ads" component={AdsManagement} />
+      <Route path="/admin/users" component={UsersManagement} />
+      <Route path="/admin/categories" component={AdminCategories} />
+      <Route path="/admin/locations" component={AdminLocations} />
+      <Route path="/admin/reports" component={AdminReports} />
+      <Route path="/admin/notifications" component={AdminNotifications} />
+      <Route path="/admin/analytics" component={AdminAnalytics} />
+      <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/pages" component={AdminPages} />
+      <Route path="/admin/packages" component={AdminPackages} />
+      <Route path="/admin/pricing" component={AdminPricing} />
+      <Route path="/notifications" component={Notifications} />
+      <Route path="/chat" component={Chat} />
+      <Route path="/chat/:id" component={ChatThreadPage} />
+      <Route path="/subscription" component={Subscription} />
+      <Route path="/my-ads" component={MyAds} />
+      <Route path="/favorites" component={Favorites} />
+      <Route path="/transactions" component={Transactions} />
+      <Route path="/reviews" component={Reviews} />
+      {/* Category routes */}
+      <Route path="/category/:slug" component={Listings} />
+      {/* Fallback to 404 */}
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

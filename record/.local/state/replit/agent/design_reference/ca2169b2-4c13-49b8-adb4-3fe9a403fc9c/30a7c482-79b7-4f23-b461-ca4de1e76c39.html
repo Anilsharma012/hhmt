@@ -1,0 +1,956 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posttrr - Buy & Sell Anything Near You</title>
+    <meta name="description" content="Posttrr is your local marketplace to buy and sell anything. Find great deals on electronics, furniture, vehicles, jobs and more in your area.">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1877f2">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Posttrr">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    colors: {
+                        background: "var(--background)",
+                        foreground: "var(--foreground)",
+                        card: {
+                            DEFAULT: "var(--card)",
+                            foreground: "var(--card-foreground)",
+                        },
+                        popover: {
+                            DEFAULT: "var(--popover)",
+                            foreground: "var(--popover-foreground)",
+                        },
+                        primary: {
+                            DEFAULT: "var(--primary)",
+                            foreground: "var(--primary-foreground)",
+                        },
+                        secondary: {
+                            DEFAULT: "var(--secondary)",
+                            foreground: "var(--secondary-foreground)",
+                        },
+                        muted: {
+                            DEFAULT: "var(--muted)",
+                            foreground: "var(--muted-foreground)",
+                        },
+                        accent: {
+                            DEFAULT: "var(--accent)",
+                            foreground: "var(--accent-foreground)",
+                        },
+                        destructive: {
+                            DEFAULT: "var(--destructive)",
+                            foreground: "var(--destructive-foreground)",
+                        },
+                        border: "var(--border)",
+                        input: "var(--input)",
+                        ring: "var(--ring)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    }
+                },
+            }
+        };
+    </script>
+    
+    <style>
+        :root {
+            --background: hsl(0 0% 100%);
+            --foreground: hsl(222 84% 5%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222 84% 5%);
+            --popover: hsl(0 0% 100%);
+            --popover-foreground: hsl(222 84% 5%);
+            --primary: hsl(214 100% 59%);
+            --primary-foreground: hsl(0 0% 100%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222 84% 5%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215 16% 47%);
+            --accent: hsl(210 40% 96%);
+            --accent-foreground: hsl(222 84% 5%);
+            --destructive: hsl(0 84% 60%);
+            --destructive-foreground: hsl(0 0% 100%);
+            --border: hsl(214 32% 91%);
+            --input: hsl(214 32% 91%);
+            --ring: hsl(214 100% 59%);
+            --radius: 0.75rem;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, hsl(214 100% 59%) 0%, hsl(207 90% 54%) 100%);
+        }
+        
+        .category-hover:hover {
+            transform: translateY(-2px);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .listing-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .install-prompt {
+            display: none;
+        }
+        
+        @media (display-mode: browser) {
+            .install-prompt {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-foreground font-sans">
+    <!-- @COMPONENT: Header [navigation, search, user menu] -->
+    <header class="bg-primary shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bolt text-primary text-lg"></i>
+                        </div>
+                        <span class="text-white text-xl font-bold">Posttrr</span>
+                    </a>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-2xl mx-4 lg:mx-8">
+                    <div class="relative">
+                        <div class="flex bg-white rounded-lg overflow-hidden shadow-sm">
+                            <select class="bg-white border-0 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary text-muted-foreground">
+                                <option>All Categories</option>
+                                <option>Cars</option>
+                                <option>Properties</option>
+                                <option>Mobiles</option>
+                                <option>Electronics</option>
+                            </select>
+                            <div class="w-px bg-border"></div>
+                            <input type="text" placeholder="Search 'Furniture'" class="flex-1 px-4 py-3 border-0 focus:outline-none focus:ring-2 focus:ring-primary text-sm" data-mock="true">
+                            <button class="bg-primary hover:bg-primary/90 text-white px-6 py-3 transition-colors">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Location & Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Location -->
+                    <div class="hidden md:flex items-center text-white/90 text-sm">
+                        <i class="fas fa-map-marker-alt mr-1"></i>
+                        <span data-bind="user.location">Rohtak, Haryana</span>
+                    </div>
+                    
+                    <!-- PWA Install Button -->
+                    <button id="install-btn" class="install-prompt bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-download mr-1"></i>
+                        Install App
+                    </button>
+                    
+                    <!-- Post Ad Button -->
+                    <a href="/post-ad" class="bg-white text-primary hover:bg-white/90 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                        <i class="fas fa-plus mr-1"></i>
+                        Post Ad
+                    </a>
+                    
+                    <!-- User Menu -->
+                    <div class="relative" data-component="UserDropdown">
+                        <button class="flex items-center text-white hover:text-white/80 transition-colors" data-event="click:toggleUserMenu">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-2">
+                                <span class="text-sm font-medium" data-bind="user.initials">AS</span>
+                            </div>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 hidden" data-state="userMenuOpen">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-user mr-2"></i>My Profile
+                            </a>
+                            <a href="/notifications" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-bell mr-2"></i>Notifications
+                            </a>
+                            <a href="/chat" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-comments mr-2"></i>Chat
+                            </a>
+                            <a href="/subscription" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-crown mr-2"></i>Subscription
+                            </a>
+                            <a href="/my-ads" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-list mr-2"></i>My Ads
+                            </a>
+                            <a href="/favorites" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-heart mr-2"></i>Favorites
+                            </a>
+                            <a href="/transactions" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-receipt mr-2"></i>Transactions
+                            </a>
+                            <a href="/reviews" class="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                                <i class="fas fa-star mr-2"></i>Reviews
+                            </a>
+                            <div class="border-t border-border my-1"></div>
+                            <button class="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors" data-event="click:signOut">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Sign out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Category Navigation -->
+        <div class="bg-white border-t border-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center space-x-8 h-12 overflow-x-auto">
+                    <a href="/category/cars" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Cars</a>
+                    <a href="/category/properties" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Properties</a>
+                    <a href="/category/mobiles" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Mobiles</a>
+                    <a href="/category/jobs" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Jobs</a>
+                    <a href="/category/fashion" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Fashion</a>
+                    <a href="/category/books-sports" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Books, Sports & Hobbies</a>
+                    <a href="/category/bikes" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Bikes</a>
+                    <a href="/category/electronics" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Electronics & Appliances</a>
+                    <a href="/category/other" class="text-sm text-foreground hover:text-primary whitespace-nowrap transition-colors">Other</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <main>
+        <!-- @COMPONENT: HeroBanner [promotional content, featured ads] -->
+        <section class="hero-gradient py-8 lg:py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Main Hero Card -->
+                    <div class="lg:col-span-2 bg-white rounded-xl shadow-lg overflow-hidden">
+                        <!-- Modern furniture setup showcasing blue sofa and coffee table -->
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400" alt="Modern furniture collection" class="w-full h-48 lg:h-64 object-cover">
+                        <div class="p-6">
+                            <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-2">Resale Furniture</h2>
+                            <p class="text-muted-foreground mb-4">Find quality pre-owned furniture at amazing prices</p>
+                            <a href="/category/furniture" class="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                Browse Collection <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Side Banner -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <!-- Modern white car on clean background -->
+                        <img src="https://images.unsplash.com/photo-1627634777217-c864268db30c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" alt="Modern white car" class="w-full h-32 lg:h-40 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-foreground mb-1">Premium Cars</h3>
+                            <p class="text-sm text-muted-foreground mb-3">Verified dealers & owners</p>
+                            <a href="/category/cars" class="text-primary font-medium hover:underline">Explore <i class="fas fa-external-link-alt ml-1 text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: HeroBanner -->
+
+        <!-- @COMPONENT: PopularCategories [category grid with icons] -->
+        <section class="py-8 lg:py-12 bg-background">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl lg:text-3xl font-bold text-foreground">Popular Categories</h2>
+                    <div class="flex space-x-2">
+                        <button class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-secondary/80 transition-colors">
+                            <i class="fas fa-chevron-left text-muted-foreground"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-primary rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">
+                            <i class="fas fa-chevron-right text-white"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6">
+                    <!-- @MAP: categories.map(category => ( -->
+                    <a href="/category/cars" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-car text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Cars</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">1.2k+ ads</p>
+                    </a>
+                    
+                    <a href="/category/properties" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-building text-green-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Properties</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">850+ ads</p>
+                    </a>
+                    
+                    <a href="/category/mobiles" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-mobile-alt text-purple-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Mobiles</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">2.1k+ ads</p>
+                    </a>
+                    
+                    <a href="/category/jobs" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-briefcase text-orange-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Jobs</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">450+ ads</p>
+                    </a>
+                    
+                    <a href="/category/fashion" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-tshirt text-pink-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Fashion</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">680+ ads</p>
+                    </a>
+                    
+                    <a href="/category/books-sports" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-book text-teal-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Books, Sports</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">320+ ads</p>
+                    </a>
+                    
+                    <a href="/category/bikes" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-motorcycle text-red-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Bikes</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">580+ ads</p>
+                    </a>
+                    
+                    <a href="/category/electronics" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-tv text-indigo-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Electronics</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">920+ ads</p>
+                    </a>
+                    
+                    <a href="/category/commercial" class="category-hover bg-white rounded-xl p-6 text-center shadow-sm border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-store text-yellow-500 text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">Commercial</h3>
+                        <p class="text-xs text-muted-foreground" data-bind="category.count">180+ ads</p>
+                    </a>
+                    
+                    <a href="/categories" class="category-hover bg-muted rounded-xl p-6 text-center border border-border hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-th text-muted-foreground text-2xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-1">View All</h3>
+                        <p class="text-xs text-muted-foreground">Categories</p>
+                    </a>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: PopularCategories -->
+
+        <!-- @COMPONENT: FeaturedListings [promoted ads section] -->
+        <section class="py-8 lg:py-12 bg-muted/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-2">Featured Ads</h2>
+                        <p class="text-muted-foreground">Premium listings from verified sellers</p>
+                    </div>
+                    <a href="/featured" class="text-primary hover:text-primary/80 font-medium transition-colors">View All <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- @MAP: featuredListings.map(listing => ( -->
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Modern smartphone on clean background -->
+                            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="iPhone smartphone" class="w-full h-48 object-cover">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-medium">Featured</span>
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">iPhone 14 Pro Max 128GB</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹85,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Rohtak, Haryana</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">2 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">124 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Red sports car in professional setting -->
+                            <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Red sports car" class="w-full h-48 object-cover">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-medium">Featured</span>
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="fas fa-heart text-red-500"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Maruti Swift Dzire 2019</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹5,50,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Delhi, India</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">5 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">89 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Modern home interior with furniture -->
+                            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Modern home interior" class="w-full h-48 object-cover">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-medium">Featured</span>
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">3BHK Apartment for Rent</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹25,000/month</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Gurgaon, Haryana</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">1 day ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">267 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Gaming laptop with RGB lighting -->
+                            <img src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Gaming laptop" class="w-full h-48 object-cover">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-medium">Featured</span>
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Gaming Laptop RTX 3070</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹95,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Mumbai, Maharashtra</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">3 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">156 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: FeaturedListings -->
+
+        <!-- @COMPONENT: RecentAds [latest listings] -->
+        <section class="py-8 lg:py-12 bg-background">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl lg:text-3xl font-bold text-foreground mb-2">Recent Ads</h2>
+                        <p class="text-muted-foreground">Latest listings from your area</p>
+                    </div>
+                    <a href="/listings" class="text-primary hover:text-primary/80 font-medium transition-colors">View All <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- @MAP: recentListings.map(listing => ( -->
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Professional office space interior -->
+                            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Office space" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Designer Position Available</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹8,00,000/year</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Rohtak, Haryana, India</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">30 minutes ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">12 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Modern home decor items and furniture -->
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Home decor" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Home Decor & Garden Items</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹15,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Rohtak, Haryana, India</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">1 hour ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">45 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Modern bedroom furniture setup -->
+                            <img src="https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Bedroom furniture" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Beds & Wardrobes Set</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹35,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Rohtak, Haryana, India</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">2 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">78 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Software development workspace with computer setup -->
+                            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Software development workspace" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">IT Engineer and Developer</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹12,00,000/year</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Rohtak, Haryana, India</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">4 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">92 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Yellow car in modern setting -->
+                            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Yellow sports car" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Sports Car - Excellent Condition</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹15,50,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Mumbai, Maharashtra</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">6 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">234 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Modern electronic devices display -->
+                            <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Electronic devices" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Electronics Bundle Package</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹45,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Delhi, India</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">8 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">167 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Classic motorcycle in garage setting -->
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Motorcycle" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Royal Enfield Classic 350</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹1,25,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Chandigarh, Punjab</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">12 hours ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">198 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="listing-card bg-white rounded-xl shadow-sm overflow-hidden border border-border">
+                        <div class="relative">
+                            <!-- Modern kitchen appliances display -->
+                            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250" alt="Kitchen appliances" class="w-full h-48 object-cover">
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors" data-event="click:toggleFavorite">
+                                <i class="far fa-heart text-muted-foreground"></i>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-foreground mb-2 line-clamp-2" data-bind="listing.title">Kitchen Appliances Set</h3>
+                            <p class="text-lg font-bold text-primary mb-2" data-bind="listing.price">₹28,000</p>
+                            <div class="flex items-center text-sm text-muted-foreground mb-3">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span data-bind="listing.location">Gurgaon, Haryana</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-muted-foreground">
+                                <span data-bind="listing.timeAgo">1 day ago</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="listing.views">143 views</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+                
+                <div class="text-center mt-8">
+                    <button class="bg-white border border-border text-foreground hover:bg-muted px-8 py-3 rounded-lg font-medium transition-colors" data-event="click:loadMore">
+                        Load More
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: RecentAds -->
+    </main>
+
+    <!-- @COMPONENT: Footer [company info, links, locations] -->
+    <footer class="bg-primary text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bolt text-primary text-lg"></i>
+                        </div>
+                        <span class="text-white text-xl font-bold">Posttrr</span>
+                    </div>
+                    <p class="text-white/80 text-sm mb-6 leading-relaxed">
+                        Unleash the power of your passion. Share your unique creations, spark conversations, and find like-minded individuals. Posttrr is more than just a marketplace - it's a community where your content shines.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fab fa-facebook text-sm"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fab fa-twitter text-sm"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fab fa-instagram text-sm"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fab fa-linkedin text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Popular Locations -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Popular Locations</h3>
+                    <ul class="space-y-2 text-sm text-white/80">
+                        <li><a href="/location/kolkata" class="hover:text-white transition-colors">Kolkata</a></li>
+                        <li><a href="/location/mumbai" class="hover:text-white transition-colors">Mumbai</a></li>
+                        <li><a href="/location/chennai" class="hover:text-white transition-colors">Chennai</a></li>
+                        <li><a href="/location/pune" class="hover:text-white transition-colors">Pune</a></li>
+                        <li><a href="/location/delhi" class="hover:text-white transition-colors">Delhi</a></li>
+                        <li><a href="/location/bangalore" class="hover:text-white transition-colors">Bangalore</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm text-white/80">
+                        <li><a href="/about" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/contact" class="hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="/subscription" class="hover:text-white transition-colors">Subscription</a></li>
+                        <li><a href="/blog" class="hover:text-white transition-colors">Our Blog</a></li>
+                        <li><a href="/faq" class="hover:text-white transition-colors">FAQs</a></li>
+                        <li><a href="/careers" class="hover:text-white transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Posttrr</h3>
+                    <ul class="space-y-2 text-sm text-white/80">
+                        <li><a href="/blog" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="/help" class="hover:text-white transition-colors">Help</a></li>
+                        <li><a href="/sitemap" class="hover:text-white transition-colors">Sitemap</a></li>
+                        <li><a href="/legal" class="hover:text-white transition-colors">Legal & Privacy Information</a></li>
+                        <li><a href="/vulnerability" class="hover:text-white transition-colors">Vulnerability Disclosure Program</a></li>
+                        <li><a href="/mobile-app" class="hover:text-white transition-colors">Mobile App</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-white/80 text-sm">All rights reserved © 2006-2025 Posttrr</p>
+                <div class="flex items-center space-x-6 mt-4 md:mt-0">
+                    <a href="/privacy" class="text-white/80 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="/terms" class="text-white/80 hover:text-white text-sm transition-colors">Terms of Service</a>
+                    <button id="footer-install-btn" class="install-prompt bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-download mr-1"></i>
+                        Install App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- PWA Installation Script -->
+    <script>
+        // PWA Installation Functionality
+        (() => {
+            let deferredPrompt;
+            const installBtns = document.querySelectorAll('#install-btn, #footer-install-btn');
+
+            // @STATE: deferredPrompt:Event|null = null
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install buttons
+                installBtns.forEach(btn => {
+                    if (btn) btn.style.display = 'block';
+                });
+            });
+
+            // Handle install button clicks
+            installBtns.forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', async () => {
+                        if (!deferredPrompt) return;
+                        
+                        deferredPrompt.prompt();
+                        const result = await deferredPrompt.userChoice;
+                        
+                        if (result.outcome === 'accepted') {
+                            console.log('PWA installed');
+                        }
+                        
+                        deferredPrompt = null;
+                        installBtns.forEach(btn => {
+                            if (btn) btn.style.display = 'none';
+                        });
+                    });
+                }
+            });
+
+            // Handle successful installation
+            window.addEventListener('appinstalled', () => {
+                console.log('PWA was installed');
+                installBtns.forEach(btn => {
+                    if (btn) btn.style.display = 'none';
+                });
+            });
+        })();
+
+        // User Menu Toggle
+        (() => {
+            const userMenuButton = document.querySelector('[data-event="click:toggleUserMenu"]');
+            const userMenuDropdown = document.querySelector('[data-state="userMenuOpen"]');
+            
+            if (userMenuButton && userMenuDropdown) {
+                userMenuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userMenuDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!userMenuButton.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                        userMenuDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        })();
+
+        // Favorite Toggle Functionality
+        (() => {
+            const favoriteButtons = document.querySelectorAll('[data-event="click:toggleFavorite"]');
+            
+            favoriteButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const icon = btn.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far', 'text-muted-foreground');
+                        icon.classList.add('fas', 'text-red-500');
+                    } else {
+                        icon.classList.remove('fas', 'text-red-500');
+                        icon.classList.add('far', 'text-muted-foreground');
+                    }
+                    
+                    // TODO: Implement API call to save/remove favorite
+                });
+            });
+        })();
+
+        // Load More Functionality
+        (() => {
+            const loadMoreBtn = document.querySelector('[data-event="click:loadMore"]');
+            
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => {
+                    // TODO: Implement pagination and API call for more listings
+                    console.log('Load more listings');
+                });
+            }
+        })();
+
+        // Search Functionality
+        (() => {
+            const searchForm = document.querySelector('form, .search-container');
+            
+            // TODO: Implement search with location detection and filtering
+            console.log('Search functionality ready for implementation');
+        })();
+
+        // Sign Out Functionality
+        (() => {
+            const signOutBtn = document.querySelector('[data-event="click:signOut"]');
+            
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', () => {
+                    // TODO: Implement sign out API call and redirect
+                    console.log('Sign out functionality');
+                });
+            }
+        })();
+    </script>
+
+    <!-- PWA Manifest -->
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => console.log('SW registered'))
+                .catch(error => console.log('SW registration failed'));
+        }
+    </script>
+</body>
+</html>

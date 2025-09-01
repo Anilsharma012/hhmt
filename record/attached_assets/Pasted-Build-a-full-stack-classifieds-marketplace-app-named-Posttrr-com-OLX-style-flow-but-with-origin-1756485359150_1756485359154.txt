@@ -1,0 +1,92 @@
+Build a full-stack classifieds marketplace app named **Posttrr.com** (OLX-style flow but with original UI; do not copy OLX branding).
+
+Tech Stack:
+- Frontend: React + Vite + TypeScript, Tailwind CSS, React Router, PWA (installable), mobile-first responsive UI.
+- Backend: Node.js + Express + TypeScript, Mongoose (MongoDB), Zod validation, JWT with HTTP-only cookie sessions.
+- Database: Use this MongoDB Atlas URI from the start (must connect successfully, no fallback to Postgres):
+  mongodb+srv://satyakachatgpt_db_user:ANILSHARMA12@cluster0.1pgdsl0.mongodb.net/
+  ✅ IMPORTANT: Connection string (notice password = ANILSHARMA12, there is **NO @ in password**):
+- Theme: Facebook-like blue palette, clean sans-serif font, card/grid components.
+
+Project Structure:
+- /client → Vite React TS frontend with Tailwind, routes, PWA manifest, install button.
+- /server → Express TS backend with Mongoose, Zod, JWT middlewares, controllers.
+- /shared → TypeScript models/types (User, Listing, Package, etc.).
+- README.md → setup + run steps.
+- .env.sample → all required env vars.
+- Seed script → pre-populate demo data: categories, subcategories, cities, areas, packages, demo ads, one default admin user.
+- Postman collection → all API endpoints.
+- Unit tests → Jest/Vitest minimal tests for server controllers.
+
+Core Features:
+
+1) Home (public):
+- Search bar with keyword + location, auto-detect location + manual picker.
+- Categories grid (8–12 demo icons seeded from start).
+- Subcategories grid when clicking a category.
+- Featured ads, recent ads, banners (hero + mid-page) controlled by admin.
+- Footer with About, Contact, FAQ, Blog, Privacy, Terms, Subscription pages → all these pages stored in DB and editable from admin.
+
+2) Listings:
+- Seller can Create/Edit/Delete listing (title, price, category, subcategory, city, area, description, up to 8 images).
+- Image upload via Cloudinary (via env) with local fallback.
+- Filters: category, subcategory, city, area, price range, sort by newest/price.
+- Listing detail page: image slider, seller card, save/favorite, report button, mark-as-sold.
+- SEO meta tags per listing (title, price, city).
+
+3) Authentication:
+- Register/Login with email/password or Google Login only.
+- No Firebase OTP flow (remove OTP completely).
+- After login, issue JWT as httpOnly cookie.
+- After registration/login, redirect user/seller to their own dashboard page and redirect admin to a separate admin dashboard page with sidebar menu.
+- User Profile: name, email, phone, avatar, my listings, favorites, chats, subscriptions, transactions, reviews.
+
+4) Seller Dashboard:
+- Manage listings: draft, active, sold.
+- Subscription packages: free/premium/featured/top with dynamic prices based on category and city/area rules.
+- Orders history + invoices.
+- Seller verification system + review system.
+- Analytics: views, clicks, conversions for each ad.
+
+5) Admin Dashboard (role=admin):
+- Sidebar with all OLX-like features (must match given screenshots + OLX flow).
+- Ads Management: categories, subcategories, custom fields, CRUD.
+- Advertisement Management: approve/reject ads, mark featured, requested ads.
+- Packages: CRUD + pricing rules (base + overrides per category/city/area).
+- User Management: roles, seller verification, reviews, reports.
+- Home Screen Management: banners, slider, featured section.
+- Location Management: countries, states, cities, areas.
+- Reports: reasons CRUD, user reports handling.
+- Promotions: send notifications, manage featured/urgent/bump ads.
+- Blogs & FAQ management.
+- Customers: list and manage all.
+- Staff Management: roles, permissions.
+- Site Settings: non-secret configs editable, env vars view-only.
+- Extra OLX-like controls:
+  • Toggle Featured Ads
+  • Toggle Urgent Ads
+  • Bump-up Ads option
+  • Top Ads carousel
+  • Location-based pricing overrides
+  • Analytics dashboard with ad performance metrics (views, clicks, saves)
+
+6) Chat & Notifications:
+- Real-time chat between buyer & seller per listing.
+- Collections: ChatThread + ChatMessage.
+- Notifications stub (ready for push/WS).
+
+7) PWA & SEO:
+- Manifest.json + service worker.
+- Mobile “Install App” button.
+- SEO tags per listing and per category.
+
+Data Models (Mongoose + TS types in /shared):
+- User { name, email, phone, password, role:'user'|'admin', avatar, createdAt }
+- Category { name, slug, icon }
+- Subcategory { categoryId, name, slug }
+- LocationCity { name, slug, state }
+- LocationArea { cityId, name, slug, pincode? }
+- Listing { userId, title, slug, categoryId, subcategoryId, cityId, areaId, price, description, images[], status:'draft'|'active'|'sold'|'rejected', isFeatured:boolean, isUrgent:boolean, createdAt }
+- Package { name, features { featured:boolean, urgent:boolean, boostDays:number, maxListings:number }, basePrice }
+- PriceRule { scope:'category'|'city'|'area', refId:ObjectId, packageId:ObjectId, price:number }
+- Order { userId, pa...
