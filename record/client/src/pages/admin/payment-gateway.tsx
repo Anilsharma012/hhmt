@@ -40,27 +40,11 @@ export default function PaymentGatewayManagement() {
   
   const queryClient = useQueryClient();
 
-  if (!user || user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card>
-          <CardContent className="p-8 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-            <p className="text-gray-600 mb-4">
-              You need admin privileges to access this page.
-            </p>
-            <Button onClick={() => setLocation('/')}>
-              Go Home
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const isAdmin = !!user && user.role === 'admin';
 
   const { data: gateways = [], isLoading } = useQuery({
     queryKey: ['/api/admin/payment-gateways'],
-    enabled: user?.role === 'admin'
+    enabled: isAdmin
   });
 
   const createGatewayMutation = useMutation({
@@ -136,7 +120,17 @@ export default function PaymentGatewayManagement() {
     }
   };
 
-  return (
+  return (!isAdmin ? (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <Card>
+        <CardContent className="p-8 text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">You need admin privileges to access this page.</p>
+          <Button onClick={() => setLocation('/')}>Go Home</Button>
+        </CardContent>
+      </Card>
+    </div>
+  ) : (
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
         <AdminSidebar />
@@ -418,5 +412,5 @@ export default function PaymentGatewayManagement() {
         </main>
       </div>
     </div>
-  );
+  ));
 }

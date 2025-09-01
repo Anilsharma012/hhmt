@@ -124,12 +124,13 @@ export const listingSchema = z.object({
   updatedAt: z.date().default(() => new Date())
 });
 
-export const insertListingSchema = listingSchema.omit({ 
-  _id: true, 
+export const insertListingSchema = listingSchema.omit({
+  _id: true,
+  userId: true,
   slug: true,
   views: true,
-  createdAt: true, 
-  updatedAt: true 
+  createdAt: true,
+  updatedAt: true
 });
 
 // Package schemas
@@ -185,7 +186,9 @@ export const updateBannerSchema = insertBannerSchema.partial();
 // Admin schemas
 export const adminUserUpdateSchema = z.object({
   role: z.enum(['user', 'seller', 'admin']).optional(),
-  isVerified: z.boolean().optional()
+  isVerified: z.boolean().optional(),
+  active: z.boolean().optional(),
+  autoApproveAds: z.boolean().optional()
 });
 
 export const adminModerateSchema = z.object({

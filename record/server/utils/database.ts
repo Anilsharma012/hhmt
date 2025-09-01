@@ -4,6 +4,10 @@ const MONGODB_URI = process.env.MONGODB_URI?.trim().replace(/^['"]|['"]$/g, '');
 
 let isConnected = false;
 
+export function isDatabaseConnected() {
+  return isConnected;
+}
+
 export async function connectToDatabase() {
   if (isConnected) {
     return;

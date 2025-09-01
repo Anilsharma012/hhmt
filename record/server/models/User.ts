@@ -33,6 +33,8 @@ const userSchema = new mongoose.Schema({
     area: String
   },
   isVerified: { type: Boolean, default: false },
+  active: { type: Boolean, default: true },
+  autoApproveAds: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

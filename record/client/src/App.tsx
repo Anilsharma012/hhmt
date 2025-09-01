@@ -39,6 +39,15 @@ import AdminSettings from "@/pages/admin/settings";
 import AdminPages from "@/pages/admin/pages";
 import AdminPackages from "@/pages/admin/packages";
 import AdminPricing from "@/pages/admin/pricing";
+import AdminPaymentGateway from "@/pages/admin/payment-gateway";
+import AdminAdvertisements from "@/pages/admin/advertisements";
+import AdminListingPackages from "@/pages/admin/packages-listing";
+import AdminFeaturedPackages from "@/pages/admin/packages-featured";
+import AdminUserPackages from "@/pages/admin/packages-users";
+import AdminTransactions from "@/pages/admin/packages-transactions";
+import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
+import AdminCustomers from "@/pages/admin/customers";
+import AdminCustomFields from "@/pages/admin/custom-fields";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
@@ -77,6 +86,7 @@ function Router() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/ads" component={AdsManagement} />
+      <Route path="/admin/advertisements" component={AdminAdvertisements} />
       <Route path="/admin/users" component={UsersManagement} />
       <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/locations" component={AdminLocations} />
@@ -86,7 +96,15 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/pages" component={AdminPages} />
       <Route path="/admin/packages" component={AdminPackages} />
+      <Route path="/admin/packages/listing" component={AdminListingPackages} />
+      <Route path="/admin/packages/featured" component={AdminFeaturedPackages} />
+      <Route path="/admin/packages/users" component={AdminUserPackages} />
+      <Route path="/admin/packages/transactions" component={AdminTransactions} />
+      <Route path="/admin/packages/bank-transfer" component={AdminBankTransfer} />
       <Route path="/admin/pricing" component={AdminPricing} />
+      <Route path="/admin/payment-gateway" component={AdminPaymentGateway} />
+      <Route path="/admin/customers" component={AdminCustomers} />
+      <Route path="/admin/custom-fields" component={AdminCustomFields} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={ChatThreadPage} />

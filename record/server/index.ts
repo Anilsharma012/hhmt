@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import cors from 'cors';
 import { registerRoutes } from "./routes";
@@ -45,8 +46,11 @@ app.use((req, res, next) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
+    try {
+      res.status(status).json({ message });
+    } catch {}
+    // Do not throw here; avoid crashing the dev server
+    log(`error ${status}: ${message}`);
   });
 
   // importantly only setup vite in development and after

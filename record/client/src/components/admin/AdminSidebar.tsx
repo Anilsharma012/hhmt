@@ -36,10 +36,12 @@ const sidebarItems = [
   {
     title: 'Categories',
     href: '/admin/categories',
-    icon: Tag,
-    submenu: [
-      { title: 'Custom Fields', href: '/admin/categories/fields' }
-    ]
+    icon: Tag
+  },
+  {
+    title: 'Custom Fields',
+    href: '/admin/custom-fields',
+    icon: Edit3
   },
   {
     title: 'Advertisement Management',
@@ -47,12 +49,12 @@ const sidebarItems = [
     icon: FileText,
     submenu: [
       { title: 'Advertisement', href: '/admin/advertisements' },
-      { title: 'Advertisement Listing', href: '/admin/advertisements/listing' }
+      { title: 'Advertisement Listing', href: '/admin/advertisements' }
     ]
   },
   {
     title: 'Ads',
-    href: '/admin/ads-overview',
+    href: '/admin/ads',
     icon: Tag
   },
   {
@@ -61,37 +63,38 @@ const sidebarItems = [
     icon: Package,
     submenu: [
       { title: 'Advertisement Listing Package', href: '/admin/packages/listing' },
-      { title: 'MO Advertisement Package', href: '/admin/packages/mo' }
+      { title: 'Feature Advertisement Package', href: '/admin/packages/featured' },
+      { title: 'MO Advertisement Package', href: '/admin/packages' }
     ]
   },
   {
     title: 'NIC',
-    href: '/admin/nic',
+    href: '/admin/users',
     icon: Users
   },
   {
     title: 'User Packages',
-    href: '/admin/user-packages',
+    href: '/admin/packages',
     icon: Users
   },
   {
     title: 'Payment Transaction',
-    href: '/admin/payments',
+    href: '/admin/payment-gateway',
     icon: CreditCard
   },
   {
     title: 'Bank Transfer',
-    href: '/admin/bank-transfer',
+    href: '/admin/payment-gateway',
     icon: CreditCard
   },
   {
     title: 'Seller Management',
-    href: '/admin/sellers',
+    href: '/admin/users',
     icon: Users,
     submenu: [
-      { title: 'Verification Fields', href: '/admin/sellers/verification' },
-      { title: 'Seller Verification', href: '/admin/sellers/verify' },
-      { title: 'Seller Review', href: '/admin/sellers/review' }
+      { title: 'Verification Fields', href: '/admin/users' },
+      { title: 'Seller Verification', href: '/admin/users' },
+      { title: 'Seller Review', href: '/admin/users' }
     ]
   },
   {
@@ -131,12 +134,12 @@ export function AdminSidebar() {
           const isActive = location === item.href || location.startsWith(item.href);
           
           return (
-            <div key={item.href}>
+            <div key={`${item.href}-${item.title}`}>
               <Link to={item.href} data-testid={`link-admin-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
                 <div className={cn(
                   "flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors cursor-pointer",
-                  isActive 
-                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700" 
+                  isActive
+                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
                     : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                 )}>
                   <Icon className="w-4 h-4" />
@@ -147,7 +150,7 @@ export function AdminSidebar() {
               {item.submenu && isActive && (
                 <div className="ml-6 mt-1 space-y-1">
                   {item.submenu.map((subitem) => (
-                    <Link key={subitem.href} to={subitem.href}>
+                    <Link key={`${subitem.href}-${subitem.title}`} to={subitem.href}>
                       <div className="flex items-center space-x-2 px-2 py-1 text-xs text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded">
                         {subitem.title}
                       </div>

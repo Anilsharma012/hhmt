@@ -21,7 +21,9 @@ const listingSchema = new mongoose.Schema({
     default: 'draft' 
   },
   isFeatured: { type: Boolean, default: false },
+  isPremium: { type: Boolean, default: false },
   isUrgent: { type: Boolean, default: false },
+  expiryDate: { type: Date, default: null },
   views: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
