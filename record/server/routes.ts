@@ -94,6 +94,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch('/api/admin/listings/:id/featured', authenticate, requireAdmin, toggleListingFeatured);
   app.post('/api/admin/listings/moderate', authenticate, requireAdmin, moderateListing);
 
+  // Admin: advertisements (aliases)
+  app.get('/api/admin/advertisements', authenticate, requireAdmin, listAdvertisements);
+  app.patch('/api/admin/advertisements/:id', authenticate, requireAdmin, patchAdvertisement);
+  app.delete('/api/admin/advertisements/:id', authenticate, requireAdmin, deleteAdvertisement);
+
   // Admin: categories
   app.get('/api/admin/categories', authenticate, requireAdmin, adminGetCategories);
   app.post('/api/admin/categories', authenticate, requireAdmin, createCategory);
