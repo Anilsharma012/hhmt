@@ -25,7 +25,7 @@ import { listAdvertisements, patchAdvertisement, deleteAdvertisement } from './c
 import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages } from './controllers/pages';
 import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
-import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser } from './controllers/users';
+import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
 import { openThread, listMessages, sendMessage, listThreads, markRead, unreadCount } from './controllers/chats';
 
 // Middleware
@@ -157,6 +157,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/admin/users', authenticate, requireAdmin, adminCreateUser);
   app.put('/api/admin/users/:id', authenticate, requireAdmin, adminUpdateUser);
   app.delete('/api/admin/users/:id', authenticate, requireAdmin, adminDeleteUser);
+  app.post('/api/admin/users/:id/reset-password', authenticate, requireAdmin, adminResetPassword);
+  app.get('/api/admin/users/:id/ads', authenticate, requireAdmin, adminListUserAds);
 
   // Orders
   app.post('/api/orders/checkout', authenticate, checkout);
