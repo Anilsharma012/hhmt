@@ -43,6 +43,9 @@ import AdminPaymentGateway from "@/pages/admin/payment-gateway";
 import AdminAdvertisements from "@/pages/admin/advertisements";
 import AdminListingPackages from "@/pages/admin/packages-listing";
 import AdminFeaturedPackages from "@/pages/admin/packages-featured";
+import AdminUserPackages from "@/pages/admin/packages-users";
+import AdminTransactions from "@/pages/admin/packages-transactions";
+import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
@@ -93,6 +96,9 @@ function Router() {
       <Route path="/admin/packages" component={AdminPackages} />
       <Route path="/admin/packages/listing" component={AdminListingPackages} />
       <Route path="/admin/packages/featured" component={AdminFeaturedPackages} />
+      <Route path="/admin/packages/users" component={AdminUserPackages} />
+      <Route path="/admin/packages/transactions" component={AdminTransactions} />
+      <Route path="/admin/packages/bank-transfer" component={AdminBankTransfer} />
       <Route path="/admin/pricing" component={AdminPricing} />
       <Route path="/admin/payment-gateway" component={AdminPaymentGateway} />
       <Route path="/notifications" component={Notifications} />
