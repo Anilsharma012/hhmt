@@ -14,13 +14,11 @@ export async function connectToDatabase() {
   }
 
   if (!MONGODB_URI) {
-    console.warn('MONGODB_URI is not set. Skipping database connection.');
-    return;
+    throw new Error('MONGODB_URI environment variable is required');
   }
 
   if (!MONGODB_URI.startsWith('mongodb://') && !MONGODB_URI.startsWith('mongodb+srv://')) {
-    console.warn('MONGODB_URI must start with "mongodb://" or "mongodb+srv://". Skipping database connection.');
-    return;
+    throw new Error('MONGODB_URI must start with "mongodb://" or "mongodb+srv://"');
   }
 
   try {
@@ -37,12 +35,7 @@ export async function connectToDatabase() {
     return conn;
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    if (process.env.NODE_ENV === 'production') {
-      throw error;
-    } else {
-      console.warn('Continuing without a database connection in non-production.');
-      return;
-    }
+    throw error;
   }
 }
 
