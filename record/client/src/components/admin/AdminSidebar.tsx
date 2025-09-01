@@ -36,23 +36,20 @@ const sidebarItems = [
   {
     title: 'Categories',
     href: '/admin/categories',
-    icon: Tag,
-    submenu: [
-      { title: 'Custom Fields', href: '/admin/categories/fields' }
-    ]
+    icon: Tag
   },
   {
     title: 'Advertisement Management',
-    href: '/admin/advertisements',
+    href: '/admin/ads',
     icon: FileText,
     submenu: [
-      { title: 'Advertisement', href: '/admin/advertisements' },
-      { title: 'Advertisement Listing', href: '/admin/advertisements/listing' }
+      { title: 'Advertisement', href: '/admin/ads' },
+      { title: 'Advertisement Listing', href: '/admin/ads' }
     ]
   },
   {
     title: 'Ads',
-    href: '/admin/ads-overview',
+    href: '/admin/ads',
     icon: Tag
   },
   {
@@ -60,38 +57,38 @@ const sidebarItems = [
     href: '/admin/packages',
     icon: Package,
     submenu: [
-      { title: 'Advertisement Listing Package', href: '/admin/packages/listing' },
-      { title: 'MO Advertisement Package', href: '/admin/packages/mo' }
+      { title: 'Advertisement Listing Package', href: '/admin/packages' },
+      { title: 'MO Advertisement Package', href: '/admin/packages' }
     ]
   },
   {
     title: 'NIC',
-    href: '/admin/nic',
+    href: '/admin/users',
     icon: Users
   },
   {
     title: 'User Packages',
-    href: '/admin/user-packages',
+    href: '/admin/packages',
     icon: Users
   },
   {
     title: 'Payment Transaction',
-    href: '/admin/payments',
+    href: '/admin/payment-gateway',
     icon: CreditCard
   },
   {
     title: 'Bank Transfer',
-    href: '/admin/bank-transfer',
+    href: '/admin/payment-gateway',
     icon: CreditCard
   },
   {
     title: 'Seller Management',
-    href: '/admin/sellers',
+    href: '/admin/users',
     icon: Users,
     submenu: [
-      { title: 'Verification Fields', href: '/admin/sellers/verification' },
-      { title: 'Seller Verification', href: '/admin/sellers/verify' },
-      { title: 'Seller Review', href: '/admin/sellers/review' }
+      { title: 'Verification Fields', href: '/admin/users' },
+      { title: 'Seller Verification', href: '/admin/users' },
+      { title: 'Seller Review', href: '/admin/users' }
     ]
   },
   {
