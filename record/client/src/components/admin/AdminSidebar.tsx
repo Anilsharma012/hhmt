@@ -44,6 +44,14 @@ const sidebarItems = [
     icon: Edit3
   },
   {
+    title: 'Home Screen Management',
+    href: '/admin/home/feature-section',
+    icon: Home,
+    submenu: [
+      { title: 'Feature Section', href: '/admin/home/feature-section' }
+    ]
+  },
+  {
     title: 'Advertisement Management',
     href: '/admin/advertisements',
     icon: FileText,
