@@ -40,11 +40,11 @@ const sidebarItems = [
   },
   {
     title: 'Advertisement Management',
-    href: '/admin/ads',
+    href: '/admin/advertisements',
     icon: FileText,
     submenu: [
-      { title: 'Advertisement', href: '/admin/ads' },
-      { title: 'Advertisement Listing', href: '/admin/ads' }
+      { title: 'Advertisement', href: '/admin/advertisements' },
+      { title: 'Advertisement Listing', href: '/admin/advertisements' }
     ]
   },
   {
