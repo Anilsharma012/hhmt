@@ -40,6 +40,7 @@ import AdminPages from "@/pages/admin/pages";
 import AdminPackages from "@/pages/admin/packages";
 import AdminPricing from "@/pages/admin/pricing";
 import AdminPaymentGateway from "@/pages/admin/payment-gateway";
+import AdminAdvertisements from "@/pages/admin/advertisements";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
@@ -78,6 +79,7 @@ function Router() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/ads" component={AdsManagement} />
+      <Route path="/admin/advertisements" component={AdminAdvertisements} />
       <Route path="/admin/users" component={UsersManagement} />
       <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/locations" component={AdminLocations} />
