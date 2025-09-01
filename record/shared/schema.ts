@@ -124,12 +124,13 @@ export const listingSchema = z.object({
   updatedAt: z.date().default(() => new Date())
 });
 
-export const insertListingSchema = listingSchema.omit({ 
-  _id: true, 
+export const insertListingSchema = listingSchema.omit({
+  _id: true,
+  userId: true,
   slug: true,
   views: true,
-  createdAt: true, 
-  updatedAt: true 
+  createdAt: true,
+  updatedAt: true
 });
 
 // Package schemas
