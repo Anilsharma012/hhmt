@@ -46,6 +46,7 @@ import AdminFeaturedPackages from "@/pages/admin/packages-featured";
 import AdminUserPackages from "@/pages/admin/packages-users";
 import AdminTransactions from "@/pages/admin/packages-transactions";
 import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
+import AdminCustomers from "@/pages/admin/customers";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
@@ -101,6 +102,7 @@ function Router() {
       <Route path="/admin/packages/bank-transfer" component={AdminBankTransfer} />
       <Route path="/admin/pricing" component={AdminPricing} />
       <Route path="/admin/payment-gateway" component={AdminPaymentGateway} />
+      <Route path="/admin/customers" component={AdminCustomers} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={ChatThreadPage} />
