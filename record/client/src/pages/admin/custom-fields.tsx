@@ -81,17 +81,17 @@ export default function AdminCustomFields(){
       header={
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 flex-wrap">
-            <Select value={category} onValueChange={v=>setCategory(v)}>
+            <Select value={category || '__all__'} onValueChange={v=>setCategory(v==='__all__'?'':v)}>
               <SelectTrigger className="w-[180px]"><SelectValue placeholder="All Categories" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="__all__">All</SelectItem>
                 {(cats||[]).map((c:any)=> (<SelectItem key={c._id} value={c._id}>{c.name}</SelectItem>))}
               </SelectContent>
             </Select>
-            <Select value={type||''} onValueChange={v=>setType(v as CFType||'')}>
+            <Select value={type || '__all__'} onValueChange={v=>setType((v==='__all__'?'': v) as CFType)}>
               <SelectTrigger className="w-[160px]"><SelectValue placeholder="All Types" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="__all__">All</SelectItem>
                 {TYPES.map(t=> (<SelectItem key={t} value={t}>{t}</SelectItem>))}
               </SelectContent>
             </Select>
