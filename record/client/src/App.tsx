@@ -48,6 +48,8 @@ import AdminTransactions from "@/pages/admin/packages-transactions";
 import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
 import AdminCustomers from "@/pages/admin/customers";
 import AdminCustomFields from "@/pages/admin/custom-fields";
+import RequestedAdvertisement from "@/pages/admin/requested-advertisement";
+import FeatureSection from "@/pages/admin/feature-section";
 import Notifications from "@/pages/notifications";
 import Chat from "@/pages/chat";
 import Subscription from "@/pages/subscription";
@@ -86,7 +88,9 @@ function Router() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/ads" component={AdsManagement} />
+      <Route path="/admin/ads/requested" component={RequestedAdvertisement} />
       <Route path="/admin/advertisements" component={AdminAdvertisements} />
+      <Route path="/admin/home/feature-section" component={FeatureSection} />
       <Route path="/admin/users" component={UsersManagement} />
       <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/locations" component={AdminLocations} />
