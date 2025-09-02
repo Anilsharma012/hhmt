@@ -56,17 +56,27 @@ export const getQueryFn: <T>(options: {
       if (qs) url += (url.includes('?') ? '&' : '?') + qs;
     }
 
-    const res = await fetch(url, {
-      headers: devAuthHeaders(),
-      credentials: 'include',
-    });
+    try {
+      const res = await fetch(url, {
+        headers: devAuthHeaders(),
+        credentials: 'include',
+      });
 
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
+      if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+        return null;
+      }
+
+      await throwIfResNotOk(res);
+      return await res.json();
+    } catch (error) {
+      // Log the error for debugging but only in development
+      if (import.meta.env.DEV) {
+        console.warn(`Query failed for ${url}:`, error);
+      }
+
+      // Re-throw the error so React Query can handle retries
+      throw error;
     }
-
-    await throwIfResNotOk(res);
-    return await res.json();
   };
 
 export const queryClient = new QueryClient({
