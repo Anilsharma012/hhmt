@@ -29,7 +29,8 @@ export default function Listings() {
     ...filters,
     page: page.toString(),
     minPrice: filters.minPrice || '',
-    maxPrice: filters.maxPrice || ''
+    maxPrice: filters.maxPrice || '',
+    subcategory: filters.subcategory || ''
   }).toString();
   
   const { data, isLoading } = useQuery({
