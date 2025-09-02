@@ -134,33 +134,40 @@ export function Header() {
       <div className="bg-white shadow-sm">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-12 overflow-x-auto">
-            <Link to="/category/cars" className="px-6 py-3 text-sm text-gray-800 hover:text-[#4285f4] whitespace-nowrap transition-colors border-b-2 border-[#4285f4]" data-testid="link-category-cars">
-              Cars
-            </Link>
-            <Link to="/category/properties" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-properties">
-              Properties ▼
-            </Link>
-            <Link to="/category/mobiles" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-mobiles">
-              Mobiles ▼
-            </Link>
-            <Link to="/category/jobs" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-jobs">
-              Jobs ▼
-            </Link>
-            <Link to="/category/fashion" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-fashion">
-              Fashion ▼
-            </Link>
-            <Link to="/category/books-sports" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-books">
-              Books, Sports & Hobbies ▼
-            </Link>
-            <Link to="/category/bikes" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-bikes">
-              Bikes ▼
-            </Link>
-            <Link to="/category/electronics" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-electronics">
-              Electronics & Appliances ▼
-            </Link>
-            <Link to="/category/other" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-other">
-              Other ▼
-            </Link>
+            {categories.length > 0 ? (
+              categories.slice(0, 8).map((category: any, index: number) => (
+                <CategoryWithSubcategories
+                  key={category._id}
+                  category={category}
+                  isActive={index === 0} // First category is active by default
+                />
+              ))
+            ) : (
+              // Fallback static categories
+              <>
+                <Link to="/category/cars" className="px-6 py-3 text-sm text-gray-800 hover:text-[#4285f4] whitespace-nowrap transition-colors border-b-2 border-[#4285f4]" data-testid="link-category-cars">
+                  Cars
+                </Link>
+                <Link to="/category/properties" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-properties">
+                  Properties ▼
+                </Link>
+                <Link to="/category/mobiles" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-mobiles">
+                  Mobiles ▼
+                </Link>
+                <Link to="/category/jobs" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-jobs">
+                  Jobs ▼
+                </Link>
+                <Link to="/category/fashion" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-fashion">
+                  Fashion ▼
+                </Link>
+                <Link to="/category/books-sports" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-books">
+                  Books, Sports & Hobbies ▼
+                </Link>
+                <Link to="/category/electronics" className="px-6 py-3 text-sm text-gray-600 hover:text-[#4285f4] hover:border-b-2 hover:border-[#4285f4] whitespace-nowrap transition-colors" data-testid="link-category-electronics">
+                  Electronics & Appliances ▼
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
