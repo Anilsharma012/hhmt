@@ -34,7 +34,13 @@ export function Header() {
             <div className="flex bg-white rounded-lg overflow-hidden shadow-md h-10">
               {/* Categories Dropdown */}
               <div className="relative">
-                <Select defaultValue="all">
+                <Select value={selectedCategory} onValueChange={(value) => {
+                  setSelectedCategory(value);
+                  if (value !== 'all') {
+                    // Navigate to category page
+                    setLocation(`/category/${value}`);
+                  }
+                }}>
                   <SelectTrigger className="w-36 h-10 border-0 border-r border-gray-300 rounded-none bg-white text-gray-700 text-sm px-3">
                     <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
@@ -48,15 +54,25 @@ export function Header() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               {/* Search Input */}
               <div className="flex-1 flex">
                 <input
                   type="text"
                   placeholder='Search "Mobiles"'
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
                   className="flex-1 px-4 py-2 text-sm text-gray-700 bg-white border-0 focus:outline-none h-10"
                 />
-                <button className="bg-[#4285f4] hover:bg-[#3367d6] text-white px-4 h-10 flex items-center justify-center">
+                <button
+                  onClick={handleSearch}
+                  className="bg-[#4285f4] hover:bg-[#3367d6] text-white px-4 h-10 flex items-center justify-center"
+                >
                   <Search className="w-4 h-4 mr-1" />
                   <span className="text-sm font-medium">Search</span>
                 </button>
