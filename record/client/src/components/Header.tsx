@@ -18,6 +18,23 @@ export function Header() {
     queryKey: ['/api/categories']
   });
 
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      const params = new URLSearchParams();
+      params.set('search', searchQuery.trim());
+      if (selectedCategory !== 'all') {
+        params.set('category', selectedCategory);
+      }
+      setLocation(`/listings?${params.toString()}`);
+    } else {
+      if (selectedCategory !== 'all') {
+        setLocation(`/category/${selectedCategory}`);
+      } else {
+        setLocation('/listings');
+      }
+    }
+  };
+
   return (
     <header className="bg-[#4285f4] shadow-lg sticky top-0 z-50">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
