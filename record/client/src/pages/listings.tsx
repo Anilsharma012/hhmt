@@ -15,13 +15,15 @@ export default function Listings() {
   const [filters, setFilters] = useState({
     search: '',
     category: '',
+    subcategory: '',
     city: '',
     minPrice: '',
     maxPrice: '',
     sort: 'createdAt'
   });
   const [page, setPage] = useState(1);
-  const [match, params] = useRoute('/category/:slug');
+  const [categoryMatch, categoryParams] = useRoute('/category/:slug');
+  const [subcategoryMatch, subcategoryParams] = useRoute('/category/:categorySlug/:subcategorySlug');
 
   const queryParams = new URLSearchParams({
     ...filters,
