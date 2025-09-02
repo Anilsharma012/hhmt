@@ -41,14 +41,52 @@ export default function Listings() {
     queryKey: ['/api/categories']
   });
 
+  // Handle URL search params
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = urlParams.get('search') || '';
+    const category = urlParams.get('category') || '';
+
+    if (search || category) {
+      setFilters(prev => ({
+        ...prev,
+        search,
+        category: category || prev.category
+      }));
+    }
+  }, []);
+
   // When route has /category/:slug, map to category id once categories load
   useEffect(() => {
-    if (match && params?.slug && categories.length) {
-      const cat = (categories as any[]).find(c => c.slug === params.slug);
-      setFilters(prev => ({ ...prev, category: cat?._id || '' }));
+    if (categoryMatch && categoryParams?.slug && categories.length) {
+      const cat = (categories as any[]).find(c => c.slug === categoryParams.slug);
+      setFilters(prev => ({ ...prev, category: cat?._id || '', subcategory: '' }));
       setPage(1);
     }
-  }, [match, params?.slug, categories]);
+  }, [categoryMatch, categoryParams?.slug, categories]);
+
+  // When route has /category/:categorySlug/:subcategorySlug
+  useEffect(() => {
+    if (subcategoryMatch && subcategoryParams && categories.length) {
+      const cat = (categories as any[]).find(c => c.slug === subcategoryParams.categorySlug);
+      if (cat) {
+        // Fetch subcategories for this category
+        fetch(`/api/categories/${cat._id}/subcategories`)
+          .then(res => res.json())
+          .then(subcategories => {
+            const subcat = subcategories.find((s: any) => s.slug === subcategoryParams.subcategorySlug);
+            if (subcat) {
+              setFilters(prev => ({
+                ...prev,
+                category: cat._id,
+                subcategory: subcat._id
+              }));
+              setPage(1);
+            }
+          });
+      }
+    }
+  }, [subcategoryMatch, subcategoryParams, categories]);
 
   const listings = (data as any)?.listings || [];
   const pagination = (data as any)?.pagination || {};
