@@ -1,4 +1,4 @@
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import { SearchBar } from './SearchBar';
 import { UserDropdown } from './UserDropdown';
@@ -6,10 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Plus, Download, MapPin, User, Search } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export function Header() {
   const { user } = useAuth();
-  
+  const [, setLocation] = useLocation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
   const { data: categories = [] } = useQuery({
     queryKey: ['/api/categories']
   });
