@@ -7,6 +7,15 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+function isNetworkError(error: any): boolean {
+  return (
+    error instanceof TypeError &&
+    (error.message.includes('Failed to fetch') ||
+     error.message.includes('Network request failed') ||
+     error.message.includes('fetch'))
+  );
+}
+
 function devAuthHeaders() {
   try {
     const raw = localStorage.getItem('posttrr_user');
