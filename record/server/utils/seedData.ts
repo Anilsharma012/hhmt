@@ -1,4 +1,4 @@
-import { Category } from '../models/Category';
+import { Category, Subcategory } from '../models/Category';
 import { User } from '../models/User';
 import { Package } from '../models/Package';
 import { Page } from '../models/Page';
