@@ -80,7 +80,11 @@ export const getQueryFn: <T>(options: {
     } catch (error) {
       // Log the error for debugging but only in development
       if (import.meta.env.DEV) {
-        console.warn(`Query failed for ${url}:`, error);
+        if (isNetworkError(error)) {
+          console.warn(`Network error for ${url}, will retry:`, error);
+        } else {
+          console.warn(`Query failed for ${url}:`, error);
+        }
       }
 
       // Re-throw the error so React Query can handle retries
