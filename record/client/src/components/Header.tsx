@@ -14,6 +14,8 @@ export function Header() {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const { data: inapp } = useQuery({ queryKey: ['/api/me/inapp-notifications', { page: 1, limit: 1 }], enabled: !!user, refetchInterval: 30000 });
+  const unread = (inapp as any)?.unread || 0;
 
   const { data: categories = [] } = useQuery({
     queryKey: ['/api/categories']
@@ -106,6 +108,13 @@ export function Header() {
               <span data-testid="text-location">Budha Khera...</span>
             </div>
             
+            {/* Notifications */}
+            {user && (
+              <Link to="/notifications" className="relative">
+                <Bell className="w-5 h-5 text-white" />
+                {unread > 0 && <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-1 rounded">{Math.min(unread,99)}</span>}
+              </Link>
+            )}
             {/* User */}
             {user ? (
               <UserDropdown />
