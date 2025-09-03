@@ -4,7 +4,7 @@ import { SearchBar } from './SearchBar';
 import { UserDropdown } from './UserDropdown';
 import { CategoryWithSubcategories } from './CategoryWithSubcategories';
 import { Button } from '@/components/ui/button';
-import { Plus, Download, MapPin, User, Search } from 'lucide-react';
+import { Plus, Download, MapPin, User, Search, Bell } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
