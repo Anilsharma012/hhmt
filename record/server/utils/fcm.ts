@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 const FCM_ENDPOINT = 'https://fcm.googleapis.com/fcm/send';
 
 export type PushMessage = {
