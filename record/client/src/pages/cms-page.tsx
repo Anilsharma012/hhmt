@@ -20,9 +20,11 @@ export default function CmsPage() {
   const [, params] = useRoute('/p/:slug');
   const slug = params?.slug;
 
+  const { data: ver } = useQuery({ queryKey: ['/api/pages/version'] });
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['/api/pages/' + slug],
-    enabled: !!slug,
+    queryKey: ['/api/pages/' + slug, { v: (ver as any)?.version || 0 }],
+    enabled: !!slug && !!ver,
     staleTime: 5 * 60 * 1000,
   });
 
