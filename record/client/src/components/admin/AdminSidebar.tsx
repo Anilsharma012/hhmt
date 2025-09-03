@@ -116,7 +116,8 @@ const sidebarItems = [
     href: '/admin/settings',
     icon: Settings,
     submenu: [
-      { title: 'Pages', href: '/admin/pages' }
+      { title: 'Pages', href: '/admin/pages' },
+      { title: 'FAQs', href: '/admin/faqs' }
     ]
   }
 ];
