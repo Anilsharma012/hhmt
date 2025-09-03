@@ -18,10 +18,24 @@ export const listPages = async (req: Request, res: Response) => {
   }
 };
 
-export const adminListPages = async (_req: Request, res: Response) => {
+export const adminListPages = async (req: Request, res: Response) => {
   try {
-    const pages = await Page.find().sort({ updatedAt: -1 });
-    return res.json({ ok: true, data: pages });
+    const q = String((req.query.q as string) || '').trim();
+    const page = Math.max(parseInt(String(req.query.page || '1'), 10) || 1, 1);
+    const limit = Math.min(Math.max(parseInt(String(req.query.limit || '20'), 10) || 20, 1), 100);
+    const filter: any = {};
+    if (q) {
+      filter.$or = [
+        { title: { $regex: q, $options: 'i' } },
+        { slug: { $regex: q, $options: 'i' } },
+      ];
+    }
+    const total = await Page.countDocuments(filter);
+    const items = await Page.find(filter)
+      .sort({ updatedAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    return res.json({ ok: true, data: items, page, limit, total, pages: Math.ceil(total / limit) });
   } catch (e: any) {
     return res.status(500).json({ ok: false, message: e?.message || 'Failed to list pages' });
   }
@@ -55,7 +69,6 @@ export const createPage = async (req: AuthRequest, res: Response) => {
       title,
       slug: providedSlug,
       contentHtml,
-      status,
       showInFooter,
       footerOrder,
       seoTitle,
@@ -73,10 +86,6 @@ export const createPage = async (req: AuthRequest, res: Response) => {
     if (!title) return res.status(400).json({ ok: false, message: 'Title is required' });
     if (!slug) return res.status(400).json({ ok: false, message: 'Slug is required' });
 
-    if (status === 'published' && !contentHtml) {
-      return res.status(400).json({ ok: false, message: 'Content is required to publish' });
-    }
-
     const exists = await Page.findOne({ slug });
     if (exists) return res.status(400).json({ ok: false, message: 'Slug already exists' });
 
@@ -84,7 +93,7 @@ export const createPage = async (req: AuthRequest, res: Response) => {
       title,
       slug,
       contentHtml: contentHtml || '',
-      status: status || 'draft',
+      status: 'draft',
       showInFooter: showInFooter !== undefined ? !!showInFooter : true,
       footerOrder: footerOrder ?? 1,
       seoTitle,
