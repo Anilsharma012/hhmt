@@ -18,7 +18,8 @@ import {
   User,
   Edit3,
   PlusCircle,
-  ChevronDown
+  ChevronDown,
+  Bell
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
