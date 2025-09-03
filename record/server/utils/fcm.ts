@@ -24,8 +24,9 @@ export async function sendPushToTokens(tokens: string[], msg: PushMessage): Prom
 
   let success = 0; let failed = 0; const failedTokens: string[] = [];
   const batches = chunk(tokens, 500);
+  const fetchFn: any = (globalThis as any).fetch;
   for (const batch of batches) {
-    const res = await fetch(FCM_ENDPOINT, {
+    const res = await fetchFn(FCM_ENDPOINT, {
       method: 'POST',
       headers: {
         'Authorization': `key=${serverKey}`,
