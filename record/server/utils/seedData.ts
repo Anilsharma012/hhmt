@@ -278,6 +278,22 @@ export async function seedDatabase() {
       }
     } catch {}
 
+    // Seed default Blog post
+    try {
+      const blogCount = await Blog.countDocuments();
+      if (blogCount === 0) {
+        await Blog.create({
+          title: 'Posttrr.com',
+          slug: 'posttrrcom',
+          imageUrl: 'https://picsum.photos/600/400',
+          tags: ['Welcome'],
+          descriptionHtml: '<h1>Welcome to Posttrr</h1><p>Posttrr.com is your marketplace for classifieds. Buy, sell, and connect with your community.</p><p><a href="/listings">Browse listings</a> or <strong>post your ad</strong> now.</p>',
+          status: 'published',
+          publishedAt: new Date(),
+        });
+      }
+    } catch {}
+
     // Seed a homepage banner
     await Banner.findOneAndUpdate(
       { position: 'homepage', title: 'Homepage Hero' },
