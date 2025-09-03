@@ -8,15 +8,21 @@ import { useLocation } from 'wouter';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 
+async function uploadImage(file: File): Promise<string> {
+  const fd = new FormData();
+  fd.append('file', file, file.name);
+  const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd, credentials: 'include' });
+  if (!res.ok) throw new Error('Upload failed: ' + res.status);
+  const ct = res.headers.get('content-type') || '';
+  if (!ct.includes('application/json')) throw new Error('Expected JSON');
+  const data = await res.json();
+  return data.url as string;
+}
+
 function Dropzone({ value, onChange }: { value: string; onChange: (url: string) => void }) {
   const onFile = async (file: File) => {
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const body = { filename: file.name, data: String(reader.result) };
-      const res = await fetch('/api/admin/uploads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body) });
-      const json = await res.json(); if (json?.url) onChange(json.url);
-    };
-    reader.readAsDataURL(file);
+    const url = await uploadImage(file);
+    if (url) onChange(url);
   };
   return (
     <div className="border rounded p-3">
@@ -58,6 +64,8 @@ export default function AdminSendNotification() {
       const userIds = segment === 'selected' ? Object.keys(selected).filter(id => selected[id]) : [];
       if (segment === 'selected' && userIds.length === 0) throw new Error('Select at least one user');
       const res = await apiRequest('POST', '/api/admin/notifications/send', { segment, userIds, title, message, imageUrl, adId });
+      const ct = res.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) throw new Error('Expected JSON');
       return res.json();
     },
     onSuccess: () => { setTitle(''); setMessage(''); setImageUrl(''); setAdId(''); setSegment('all'); setSelected({}); queryClient.invalidateQueries({ queryKey: ['/api/admin/notifications'] }); },
