@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 
 export function Footer() {
-  const { data: footerPages } = useQuery({ queryKey: ['/api/pages', { footer: true }] });
+  const { data: ver } = useQuery({ queryKey: ['/api/pages/version'] });
+  const { data: footerPages } = useQuery({ queryKey: ['/api/pages', { footer: true, v: (ver as any)?.version || 0 }], enabled: !!ver });
   const pathForSlug = (slug: string) => {
     const map: Record<string, string> = {
       'about': '/about',
