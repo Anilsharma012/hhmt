@@ -78,7 +78,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return data.user as User;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const t = localStorage.getItem('posttrr_fcm_token');
+      if (t) {
+        await fetch('/api/devices', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ fcmToken: t }) });
+      }
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch {}
     persist(null);
   };
 
