@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Page } from '../models/Page';
 import { AuthRequest } from '../middleware/auth';
 import jwt from 'jsonwebtoken';
+import { bumpVersion } from '../utils/cacheVersion';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
 
@@ -125,6 +126,7 @@ export const createPage = async (req: AuthRequest, res: Response) => {
     if (page.status === 'published') page.publishedAt = new Date();
 
     await page.save();
+    bumpVersion('pages');
     return res.status(201).json({ ok: true, data: page });
   } catch (e: any) {
     return res.status(500).json({ ok: false, message: e?.message || 'Failed to create page' });
@@ -180,6 +182,7 @@ export const updatePage = async (req: AuthRequest, res: Response) => {
 
     const page = await Page.findByIdAndUpdate(id, updates, { new: true });
     if (!page) return res.status(404).json({ ok: false, message: 'Page not found' });
+    bumpVersion('pages');
     return res.json({ ok: true, data: page });
   } catch (e: any) {
     return res.status(500).json({ ok: false, message: e?.message || 'Failed to update page' });
@@ -190,6 +193,7 @@ export const deletePage = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     await Page.findByIdAndDelete(id);
+    bumpVersion('pages');
     return res.json({ ok: true, data: { deleted: true } });
   } catch (e: any) {
     return res.status(500).json({ ok: false, message: e?.message || 'Failed to delete page' });
