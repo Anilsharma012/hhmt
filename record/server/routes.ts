@@ -29,6 +29,7 @@ import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
 import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
 import { openThread, listMessages, sendMessage, listThreads, markRead, unreadCount } from './controllers/chats';
+import multer from 'multer';
 import { registerDevice, unregisterDevice, sendAdminNotification, adminListNotifications, adminDeleteNotification, listMyInApp, markInAppRead } from './controllers/notifications';
 
 // Middleware
@@ -99,6 +100,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/admin/notifications/send', authenticate, requireAdmin, sendAdminNotification);
   app.delete('/api/admin/notifications/:id', authenticate, requireAdmin, adminDeleteNotification);
 
+  // File uploads (multer)
+  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 3 * 1024 * 1024 } });
+
   // Admin: pages
   app.get('/api/admin/pages', authenticate, requireAdmin, adminListPages);
   app.get('/api/admin/pages/:id', authenticate, requireAdmin, adminGetPage);
@@ -106,7 +110,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/admin/pages', authenticate, requireAdmin, createPage);
   app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
   app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
-  app.post('/api/admin/uploads', authenticate, requireAdmin, (await import('./controllers/uploads')).uploadImage);
+  app.post('/api/admin/uploads', authenticate, requireAdmin, upload.single('file'), (await import('./controllers/uploads')).uploadImage);
 
   // Admin blogs
   app.get('/api/admin/blogs', authenticate, requireAdmin, adminListBlogs);
