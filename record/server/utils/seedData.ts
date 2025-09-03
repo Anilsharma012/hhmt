@@ -1,4 +1,4 @@
-import { Category } from '../models/Category';
+import { Category, Subcategory } from '../models/Category';
 import { User } from '../models/User';
 import { Package } from '../models/Package';
 import { Page } from '../models/Page';
@@ -19,12 +19,57 @@ export async function seedDatabase() {
       { name: 'Commercial Vehicles & Spares', slug: 'commercial', icon: 'fas fa-truck' }
     ];
 
+    const categoryDocs: Record<string, any> = {};
     for (const categoryData of categoriesData) {
-      await Category.findOneAndUpdate(
+      const doc = await Category.findOneAndUpdate(
         { slug: categoryData.slug },
         categoryData,
-        { upsert: true }
+        { upsert: true, new: true }
       );
+      categoryDocs[categoryData.slug] = doc;
+    }
+
+    // Seed subcategories
+    const subcategoriesData = [
+      // Cars subcategories
+      { categorySlug: 'cars', name: 'Sedan', slug: 'sedan' },
+      { categorySlug: 'cars', name: 'SUV', slug: 'suv' },
+      { categorySlug: 'cars', name: 'Hatchback', slug: 'hatchback' },
+      { categorySlug: 'cars', name: 'Luxury Cars', slug: 'luxury-cars' },
+
+      // Properties subcategories
+      { categorySlug: 'properties', name: 'Apartments', slug: 'apartments' },
+      { categorySlug: 'properties', name: 'Houses', slug: 'houses' },
+      { categorySlug: 'properties', name: 'Commercial Space', slug: 'commercial-space' },
+      { categorySlug: 'properties', name: 'Land', slug: 'land' },
+
+      // Mobiles subcategories
+      { categorySlug: 'mobiles', name: 'Android', slug: 'android' },
+      { categorySlug: 'mobiles', name: 'iPhone', slug: 'iphone' },
+      { categorySlug: 'mobiles', name: 'Feature Phones', slug: 'feature-phones' },
+      { categorySlug: 'mobiles', name: 'Tablets', slug: 'tablets' },
+
+      // Electronics subcategories
+      { categorySlug: 'electronics', name: 'Laptops', slug: 'laptops' },
+      { categorySlug: 'electronics', name: 'TVs', slug: 'tvs' },
+      { categorySlug: 'electronics', name: 'Refrigerators', slug: 'refrigerators' },
+      { categorySlug: 'electronics', name: 'Washing Machines', slug: 'washing-machines' },
+    ];
+
+    for (const subcategoryData of subcategoriesData) {
+      const category = categoryDocs[subcategoryData.categorySlug];
+      if (category) {
+        await Subcategory.findOneAndUpdate(
+          { slug: subcategoryData.slug, categoryId: category._id },
+          {
+            name: subcategoryData.name,
+            slug: subcategoryData.slug,
+            categoryId: category._id,
+            isActive: true
+          },
+          { upsert: true }
+        );
+      }
     }
 
     // Seed admin user

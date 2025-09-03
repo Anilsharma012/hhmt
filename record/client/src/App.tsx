@@ -119,6 +119,7 @@ function Router() {
       <Route path="/reviews" component={Reviews} />
       {/* Category routes */}
       <Route path="/category/:slug" component={Listings} />
+      <Route path="/category/:categorySlug/:subcategorySlug" component={Listings} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

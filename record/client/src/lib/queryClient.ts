@@ -7,6 +7,15 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+function isNetworkError(error: any): boolean {
+  return (
+    error instanceof TypeError &&
+    (error.message.includes('Failed to fetch') ||
+     error.message.includes('Network request failed') ||
+     error.message.includes('fetch'))
+  );
+}
+
 function devAuthHeaders() {
   try {
     const raw = localStorage.getItem('posttrr_user');
@@ -56,17 +65,31 @@ export const getQueryFn: <T>(options: {
       if (qs) url += (url.includes('?') ? '&' : '?') + qs;
     }
 
-    const res = await fetch(url, {
-      headers: devAuthHeaders(),
-      credentials: 'include',
-    });
+    try {
+      const res = await fetch(url, {
+        headers: devAuthHeaders(),
+        credentials: 'include',
+      });
 
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
+      if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+        return null;
+      }
+
+      await throwIfResNotOk(res);
+      return await res.json();
+    } catch (error) {
+      // Log the error for debugging but only in development
+      if (import.meta.env.DEV) {
+        if (isNetworkError(error)) {
+          console.warn(`Network error for ${url}, will retry:`, error);
+        } else {
+          console.warn(`Query failed for ${url}:`, error);
+        }
+      }
+
+      // Re-throw the error so React Query can handle retries
+      throw error;
     }
-
-    await throwIfResNotOk(res);
-    return await res.json();
   };
 
 export const queryClient = new QueryClient({
@@ -75,8 +98,19 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes instead of Infinity
+      retry: (failureCount, error) => {
+        // Don't retry on 4xx errors (except 401)
+        if (error instanceof Error && error.message.includes('4')) {
+          const status = parseInt(error.message.split(':')[0]);
+          if (status >= 400 && status < 500 && status !== 401) {
+            return false;
+          }
+        }
+        // Retry up to 2 times for network errors
+        return failureCount < 2;
+      },
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 3000),
     },
     mutations: {
       retry: false,
