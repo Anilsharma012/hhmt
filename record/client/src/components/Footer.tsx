@@ -87,6 +87,10 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4" data-testid="text-footer-support-title">About & Legal</h3>
             <ul className="space-y-3 text-sm text-white/80">
+              {(() => {
+                const [faqsFooter, setFaqsFooter] = [null, null] as any; // placeholder for hook-less static
+                return null;
+              })()}
               {(footerPages || []).map((p: any) => (
                 <li key={p.slug}>
                   <Link to={pathForSlug(p.slug)} className="hover:text-white transition-colors">
