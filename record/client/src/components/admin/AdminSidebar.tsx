@@ -6,10 +6,10 @@ import {
   FileText, 
   Users, 
   Settings, 
-  Tag, 
-  MapPin, 
-  Flag, 
-  Bell, 
+  Tag,
+  MapPin,
+  Flag,
+  Bell,
   BarChart,
   LogOut,
   Home,
@@ -18,8 +18,7 @@ import {
   User,
   Edit3,
   PlusCircle,
-  ChevronDown,
-  Bell
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
