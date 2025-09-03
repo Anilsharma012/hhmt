@@ -81,6 +81,9 @@ export function Footer() {
                   <Link to="/faq" className="hover:text-white transition-colors">FAQs</Link>
                 </li>
               )}
+              <li>
+                <Link to="/blogs" className="hover:text-white transition-colors">Blog</Link>
+              </li>
               {(footerPages || []).map((p: any) => (
                 <li key={p.slug}>
                   <Link to={pathForSlug(p.slug)} className="hover:text-white transition-colors">
