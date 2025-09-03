@@ -195,7 +195,7 @@ export default function AdminSettings() {
                   <Input placeholder="Slug" value={form.slug} readOnly={slugLocked} onChange={e => setForm({ ...form, slug: e.target.value })} />
                   <Button type="button" variant="outline" onClick={() => { if (slugLocked) { if (confirm('Edit slug? This may affect links.')) setSlugLocked(false); } else setSlugLocked(true); }}>{slugLocked ? 'Edit' : 'Lock'}</Button>
                 </div>
-                <Wysiwyg value={form.contentHtml} onChange={(html) => setForm({ ...form, contentHtml: html })} />
+                <TinyEditor value={form.contentHtml} onChange={(html) => setForm({ ...form, contentHtml: html })} />
                 <div className="grid grid-cols-2 gap-2">
                   <select className="border rounded px-2" value={form.status} onChange={e => setForm({ ...form, status: e.target.value as any })}>
                     <option value="draft">Draft</option>
