@@ -70,7 +70,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Public pages
   app.get('/api/pages', listPages);
-  app.get('/api/pages/version', (_req, res) => res.json({ version: require('./utils/cacheVersion').getVersion('pages') }));
+  app.get('/api/pages/version', async (_req, res) => {
+    const { getVersion } = await import('./utils/cacheVersion');
+    res.json({ version: getVersion('pages') });
+  });
   app.get('/api/pages/:slug', getPageBySlug);
 
   // Admin routes
