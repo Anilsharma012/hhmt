@@ -45,6 +45,7 @@ import AdminAdvertisements from "@/pages/admin/advertisements";
 import AdminListingPackages from "@/pages/admin/packages-listing";
 import AdminFeaturedPackages from "@/pages/admin/packages-featured";
 import AdminUserPackages from "@/pages/admin/packages-users";
+import AdminSendNotification from "@/pages/admin/send-notification";
 import AdminTransactions from "@/pages/admin/packages-transactions";
 import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
 import AdminCustomers from "@/pages/admin/customers";
