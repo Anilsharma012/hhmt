@@ -34,6 +34,7 @@ import AdminNotifications from "@/pages/admin/notifications";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
 import AdminPages from "@/pages/admin/pages";
+import AdminFaqs from "@/pages/admin/faqs";
 import AdminPackages from "@/pages/admin/packages";
 import AdminPricing from "@/pages/admin/pricing";
 import AdminPaymentGateway from "@/pages/admin/payment-gateway";
