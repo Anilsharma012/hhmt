@@ -262,6 +262,21 @@ export async function seedDatabase() {
       }
     }
 
+    // Seed default FAQs
+    try {
+      const { Faq } = await import('../models/Faq');
+      const existing = await Faq.countDocuments();
+      if (existing === 0) {
+        const faqs = [
+          { question: 'How do I post an ad?', answer: '<p>Go to Post Ad and fill the form.</p>', status: 'active', sortOrder: 1 },
+          { question: 'How do I contact a seller?', answer: '<p>Use the chat feature on listing page.</p>', status: 'active', sortOrder: 2 },
+          { question: 'Is there a listing fee?', answer: '<p>Basic listings are free; premium options available.</p>', status: 'active', sortOrder: 3 },
+          { question: 'How to report a suspicious ad?', answer: '<p>Click Report on the listing and choose a reason.</p>', status: 'active', sortOrder: 4 },
+        ];
+        for (const f of faqs) await Faq.create(f);
+      }
+    } catch {}
+
     // Seed a homepage banner
     await Banner.findOneAndUpdate(
       { position: 'homepage', title: 'Homepage Hero' },
