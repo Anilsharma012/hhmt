@@ -22,7 +22,7 @@ import { createReport, listReports, updateReport, deleteReport, adminListReportR
 import { trackClick, trackSave, adminAnalytics } from './controllers/analytics';
 import { getDashboardStats, updateListingStatus, adminListListings, adminCreateListing, adminUpdateListing, adminDeleteListing, moderateListing, toggleListingFeatured } from './controllers/admin';
 import { listAdvertisements, patchAdvertisement, deleteAdvertisement } from './controllers/advertisements';
-import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages } from './controllers/pages';
+import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages, adminGetPage } from './controllers/pages';
 import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
 import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
