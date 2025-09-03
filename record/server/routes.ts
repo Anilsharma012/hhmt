@@ -80,6 +80,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/faqs', publicListFaqs);
   app.get('/api/faqs/footer', publicFooterFaqs);
   app.get('/api/faqs/version', faqsVersion);
+  // Public blogs
+  app.get('/api/blogs', publicListBlogs);
+  app.get('/api/blogs/version', blogsVersion);
+  app.get('/api/blogs/:slug', publicGetBlogBySlug);
 
   // Admin routes
   app.get('/api/admin/dashboard', authenticate, requireAdmin, getDashboardStats);
@@ -93,6 +97,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
   app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
   app.post('/api/admin/uploads', authenticate, requireAdmin, (await import('./controllers/uploads')).uploadImage);
+
+  // Admin blogs
+  app.get('/api/admin/blogs', authenticate, requireAdmin, adminListBlogs);
+  app.get('/api/admin/blogs/:id', authenticate, requireAdmin, adminGetBlog);
+  app.post('/api/admin/blogs', authenticate, requireAdmin, adminCreateBlog);
+  app.put('/api/admin/blogs/:id', authenticate, requireAdmin, adminUpdateBlog);
+  app.delete('/api/admin/blogs/:id', authenticate, requireAdmin, adminDeleteBlog);
 
   // Admin: FAQs
   app.get('/api/admin/faqs', authenticate, requireAdmin, adminListFaqs);
