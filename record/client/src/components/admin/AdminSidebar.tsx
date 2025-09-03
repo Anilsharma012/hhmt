@@ -110,6 +110,14 @@ const sidebarItems = [
     title: 'Payment Gateway',
     href: '/admin/payment-gateway',
     icon: CreditCard
+  },
+  {
+    title: 'Settings',
+    href: '/admin/settings',
+    icon: Settings,
+    submenu: [
+      { title: 'Pages', href: '/admin/pages' }
+    ]
   }
 ];
 
