@@ -67,9 +67,14 @@ function Router() {
       <Route path="/post-ad" component={PostAd} />
       <Route path="/profile" component={Profile} />
       <Route path="/dashboard" component={Dashboard} />
-      {/* Public pages */}
-      <Route path="/about" component={About} />
-      <Route path="/contact" component={Contact} />
+      {/* CMS pages */}
+      <Route path="/p/:slug" component={CmsPage} />
+      {/* Public pages mapped to CMS slugs */}
+      <Route path="/about" component={() => <CmsPage />} />
+      <Route path="/privacy-policy" component={() => <CmsPage />} />
+      <Route path="/terms" component={() => <CmsPage />} />
+      <Route path="/contact-us" component={() => <CmsPage />} />
+      {/* Other static pages (legacy) */}
       <Route path="/blog" component={Blog} />
       <Route path="/faq" component={FAQ} />
       <Route path="/careers" component={Careers} />
@@ -78,8 +83,6 @@ function Router() {
       <Route path="/legal" component={Legal} />
       <Route path="/vulnerability" component={Vulnerability} />
       <Route path="/mobile-app" component={MobileApp} />
-      <Route path="/privacy" component={Privacy} />
-      <Route path="/terms" component={Terms} />
       <Route path="/location/:slug" component={Location} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/login" component={AdminLogin} />
