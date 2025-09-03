@@ -62,6 +62,14 @@ const sidebarItems = [
     ]
   },
   {
+    title: 'Promotional Management',
+    href: '/admin/send-notification',
+    icon: Bell,
+    submenu: [
+      { title: 'Send Notification', href: '/admin/send-notification' }
+    ]
+  },
+  {
     title: 'Ads',
     href: '/admin/ads',
     icon: Tag
