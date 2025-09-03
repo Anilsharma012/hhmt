@@ -119,6 +119,14 @@ const sidebarItems = [
       { title: 'Pages', href: '/admin/pages' },
       { title: 'FAQs', href: '/admin/faqs' }
     ]
+  },
+  {
+    title: 'Blog Management',
+    href: '/admin/blogs',
+    icon: FileText,
+    submenu: [
+      { title: 'Blogs', href: '/admin/blogs' }
+    ]
   }
 ];
 
