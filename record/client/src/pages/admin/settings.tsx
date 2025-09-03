@@ -40,6 +40,7 @@ export default function AdminSettings() {
     queryClient.invalidateQueries({ queryKey: ['/api/admin/pages'] });
     queryClient.invalidateQueries({ queryKey: ['/api/pages'] });
     queryClient.invalidateQueries({ queryKey: ['/api/pages', { footer: true }] });
+    queryClient.invalidateQueries({ queryKey: ['/api/pages/version'] });
   };
 
   const toast = (opts: { title: string }) => {
