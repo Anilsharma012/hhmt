@@ -79,6 +79,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: pages
   app.get('/api/admin/pages', authenticate, requireAdmin, adminListPages);
   app.get('/api/admin/pages/:id', authenticate, requireAdmin, adminGetPage);
+  app.get('/api/admin/pages/preview-token/new', authenticate, requireAdmin, (await import('./controllers/pages')).getPreviewToken);
   app.post('/api/admin/pages', authenticate, requireAdmin, createPage);
   app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
   app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
