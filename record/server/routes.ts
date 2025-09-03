@@ -24,6 +24,7 @@ import { getDashboardStats, updateListingStatus, adminListListings, adminCreateL
 import { listAdvertisements, patchAdvertisement, deleteAdvertisement } from './controllers/advertisements';
 import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages, adminGetPage } from './controllers/pages';
 import { adminListFaqs, adminCreateFaq, adminUpdateFaq, adminToggleFaq, adminReorderFaqs, adminDeleteFaq, publicListFaqs, publicFooterFaqs, faqsVersion } from './controllers/faqs';
+import { adminListBlogs, adminGetBlog, adminCreateBlog, adminUpdateBlog, adminDeleteBlog, publicListBlogs, publicGetBlogBySlug, blogsVersion } from './controllers/blogs';
 import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
 import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
