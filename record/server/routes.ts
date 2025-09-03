@@ -87,6 +87,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/admin/pages', authenticate, requireAdmin, createPage);
   app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
   app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
+  app.post('/api/admin/uploads', authenticate, requireAdmin, (await import('./controllers/uploads')).uploadImage);
 
   // Admin: reports & reasons
   app.get('/api/admin/reports', authenticate, requireAdmin, listReports);
