@@ -131,18 +131,56 @@ export async function seedDatabase() {
       );
     }
 
-    // Seed CMS pages
+    // Seed CMS pages (About, Privacy Policy, Terms & Conditions, Contact Us)
     const pagesData = [
-      { title: 'About Us', slug: 'about', content: 'About Posttrr - a community marketplace.' },
-      { title: 'Contact Us', slug: 'contact', content: 'Email: support@posttrr.com' },
-      { title: 'FAQ', slug: 'faq', content: 'Frequently asked questions.' },
-      { title: 'Blog', slug: 'blog', content: 'Latest news and stories.' },
-      { title: 'Privacy Policy', slug: 'privacy', content: 'Your privacy matters to us.' },
-      { title: 'Terms of Service', slug: 'terms', content: 'Terms and conditions.' }
+      {
+        title: 'About Us',
+        slug: 'about',
+        contentHtml: '<h1>About Posttrr</h1><p>Posttrr is a community marketplace connecting buyers and sellers.</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 1,
+        seoTitle: 'About Posttrr',
+        seoDescription: 'Learn about Posttrr – a Facebook-like marketplace for local classifieds.'
+      },
+      {
+        title: 'Privacy Policy',
+        slug: 'privacy-policy',
+        contentHtml: '<h1>Privacy Policy</h1><p>Your privacy matters to us at Posttrr.</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 2,
+        seoTitle: 'Privacy Policy',
+        seoDescription: 'Read Posttrr\'s privacy policy.'
+      },
+      {
+        title: 'Terms & Conditions',
+        slug: 'terms',
+        contentHtml: '<h1>Terms & Conditions</h1><p>By using Posttrr, you agree to the following terms.</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 3,
+        seoTitle: 'Terms & Conditions',
+        seoDescription: 'Posttrr\'s terms and conditions.'
+      },
+      {
+        title: 'Contact Us',
+        slug: 'contact-us',
+        contentHtml: '<h1>Contact Us</h1><p>Email: support@posttrr.com</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 4,
+        seoTitle: 'Contact Posttrr',
+        seoDescription: 'Get in touch with the Posttrr team.'
+      }
     ];
 
     for (const pageData of pagesData) {
-      await Page.findOneAndUpdate({ slug: pageData.slug }, pageData, { upsert: true });
+      await Page.findOneAndUpdate(
+        { slug: pageData.slug },
+        { ...pageData, publishedAt: new Date() },
+        { upsert: true }
+      );
     }
 
     // Seed locations
