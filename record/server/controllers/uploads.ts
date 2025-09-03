@@ -14,10 +14,22 @@ function safeName(name: string): string {
 
 export async function uploadImage(req: Request, res: Response) {
   try {
+    const dir = ensureUploadsDir();
+    const fileAny: any = (req as any).file;
+
+    if (fileAny && fileAny.buffer) {
+      const orig = String(fileAny.originalname || `img_${Date.now()}`);
+      const ext = path.extname(orig) || '.png';
+      const base = safeName(orig.replace(/\.[^.]+$/, '')) + ext;
+      const filePath = path.join(dir, base);
+      await fs.promises.writeFile(filePath, fileAny.buffer);
+      const url = `/uploads/${base}`;
+      return res.json({ ok: true, url });
+    }
+
     const { filename, data } = (req.body || {}) as { filename?: string; data?: string };
     if (!data) return res.status(400).json({ ok: false, message: 'Missing data' });
 
-    const dir = ensureUploadsDir();
     const base = safeName(filename || `img_${Date.now()}.png`);
     const filePath = path.join(dir, base);
 
