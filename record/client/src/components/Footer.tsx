@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 export function Footer() {
   const { data: ver } = useQuery({ queryKey: ['/api/pages/version'] });
   const { data: footerPages } = useQuery({ queryKey: ['/api/pages', { footer: true, v: (ver as any)?.version || 0 }], enabled: !!ver });
+  const { data: faqsFooter } = useQuery({ queryKey: ['/api/faqs/footer'] });
   const pathForSlug = (slug: string) => {
     const map: Record<string, string> = {
       'about': '/about',
@@ -71,26 +72,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4" data-testid="text-footer-quicklinks-title">Quick Links</h3>
-            <ul className="space-y-3 text-sm text-white/80">
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">How to sell fast</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Advertise with us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Business Solutions</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Promote your ad</a></li>
-            </ul>
-          </div>
-
           {/* About & Legal */}
           <div>
             <h3 className="text-white font-semibold mb-4" data-testid="text-footer-support-title">About & Legal</h3>
             <ul className="space-y-3 text-sm text-white/80">
-              {(() => {
-                const [faqsFooter, setFaqsFooter] = [null, null] as any; // placeholder for hook-less static
-                return null;
-              })()}
+              {((faqsFooter as any)?.data || []).length > 0 && (
+                <li>
+                  <Link to="/faq" className="hover:text-white transition-colors">FAQs</Link>
+                </li>
+              )}
               {(footerPages || []).map((p: any) => (
                 <li key={p.slug}>
                   <Link to={pathForSlug(p.slug)} className="hover:text-white transition-colors">
