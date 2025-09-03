@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,8 +13,7 @@ import ListingDetail from "@/pages/listing-detail";
 import PostAd from "@/pages/post-ad";
 import Profile from "@/pages/profile";
 import Dashboard from "@/pages/dashboard";
-import About from "@/pages/about";
-import Contact from "@/pages/contact";
+import CmsPage from "@/pages/cms-page";
 import Blog from "@/pages/blog";
 import FAQ from "@/pages/faq";
 import Careers from "@/pages/careers";
@@ -23,8 +22,6 @@ import Sitemap from "@/pages/sitemap";
 import Legal from "@/pages/legal";
 import Vulnerability from "@/pages/vulnerability";
 import MobileApp from "@/pages/mobile-app";
-import Privacy from "@/pages/privacy";
-import Terms from "@/pages/terms";
 import Location from "@/pages/location";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdsManagement from "@/pages/admin/ads-management";
@@ -37,13 +34,18 @@ import AdminNotifications from "@/pages/admin/notifications";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
 import AdminPages from "@/pages/admin/pages";
+import AdminFaqs from "@/pages/admin/faqs";
 import AdminPackages from "@/pages/admin/packages";
+import AdminBlogs from "@/pages/admin/blogs";
+import Blogs from "@/pages/blogs";
+import BlogDetail from "@/pages/blog-detail";
 import AdminPricing from "@/pages/admin/pricing";
 import AdminPaymentGateway from "@/pages/admin/payment-gateway";
 import AdminAdvertisements from "@/pages/admin/advertisements";
 import AdminListingPackages from "@/pages/admin/packages-listing";
 import AdminFeaturedPackages from "@/pages/admin/packages-featured";
 import AdminUserPackages from "@/pages/admin/packages-users";
+import AdminSendNotification from "@/pages/admin/send-notification";
 import AdminTransactions from "@/pages/admin/packages-transactions";
 import AdminBankTransfer from "@/pages/admin/packages-bank-transfer";
 import AdminCustomers from "@/pages/admin/customers";
@@ -70,10 +72,16 @@ function Router() {
       <Route path="/post-ad" component={PostAd} />
       <Route path="/profile" component={Profile} />
       <Route path="/dashboard" component={Dashboard} />
-      {/* Public pages */}
-      <Route path="/about" component={About} />
-      <Route path="/contact" component={Contact} />
-      <Route path="/blog" component={Blog} />
+      {/* CMS pages */}
+      <Route path="/p/:slug" component={CmsPage} />
+      {/* Public pages mapped to CMS slugs */}
+      <Route path="/about" component={() => <Redirect to="/p/about" />} />
+      <Route path="/privacy-policy" component={() => <Redirect to="/p/privacy-policy" />} />
+      <Route path="/terms" component={() => <Redirect to="/p/terms" />} />
+      <Route path="/contact-us" component={() => <Redirect to="/p/contact-us" />} />
+      {/* Other static pages (legacy) */}
+      <Route path="/blogs" component={Blogs} />
+      <Route path="/blog/:slug" component={BlogDetail} />
       <Route path="/faq" component={FAQ} />
       <Route path="/careers" component={Careers} />
       <Route path="/help" component={Help} />
@@ -81,8 +89,6 @@ function Router() {
       <Route path="/legal" component={Legal} />
       <Route path="/vulnerability" component={Vulnerability} />
       <Route path="/mobile-app" component={MobileApp} />
-      <Route path="/privacy" component={Privacy} />
-      <Route path="/terms" component={Terms} />
       <Route path="/location/:slug" component={Location} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/login" component={AdminLogin} />
@@ -99,6 +105,8 @@ function Router() {
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/pages" component={AdminPages} />
+      <Route path="/admin/faqs" component={AdminFaqs} />
+      <Route path="/admin/blogs" component={AdminBlogs} />
       <Route path="/admin/packages" component={AdminPackages} />
       <Route path="/admin/packages/listing" component={AdminListingPackages} />
       <Route path="/admin/packages/featured" component={AdminFeaturedPackages} />
@@ -109,6 +117,7 @@ function Router() {
       <Route path="/admin/payment-gateway" component={AdminPaymentGateway} />
       <Route path="/admin/customers" component={AdminCustomers} />
       <Route path="/admin/custom-fields" component={AdminCustomFields} />
+      <Route path="/admin/send-notification" component={AdminSendNotification} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={ChatThreadPage} />

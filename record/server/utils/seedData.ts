@@ -3,6 +3,8 @@ import { User } from '../models/User';
 import { Package } from '../models/Package';
 import { Page } from '../models/Page';
 import { Banner } from '../models/Banner';
+import { Blog } from '../models/Blog';
+import { Category, Subcategory } from '../models/Category';
 
 export async function seedDatabase() {
   try {
@@ -131,18 +133,56 @@ export async function seedDatabase() {
       );
     }
 
-    // Seed CMS pages
+    // Seed CMS pages (About, Privacy Policy, Terms & Conditions, Contact Us)
     const pagesData = [
-      { title: 'About Us', slug: 'about', content: 'About Posttrr - a community marketplace.' },
-      { title: 'Contact Us', slug: 'contact', content: 'Email: support@posttrr.com' },
-      { title: 'FAQ', slug: 'faq', content: 'Frequently asked questions.' },
-      { title: 'Blog', slug: 'blog', content: 'Latest news and stories.' },
-      { title: 'Privacy Policy', slug: 'privacy', content: 'Your privacy matters to us.' },
-      { title: 'Terms of Service', slug: 'terms', content: 'Terms and conditions.' }
+      {
+        title: 'About Us',
+        slug: 'about',
+        contentHtml: '<h1>About Posttrr</h1><p>Posttrr is a community marketplace connecting buyers and sellers.</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 1,
+        seoTitle: 'About Posttrr',
+        seoDescription: 'Learn about Posttrr – a Facebook-like marketplace for local classifieds.'
+      },
+      {
+        title: 'Privacy Policy',
+        slug: 'privacy-policy',
+        contentHtml: '<h1>Privacy Policy</h1><p>Your privacy matters to us at Posttrr.</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 2,
+        seoTitle: 'Privacy Policy',
+        seoDescription: 'Read Posttrr\'s privacy policy.'
+      },
+      {
+        title: 'Terms & Conditions',
+        slug: 'terms',
+        contentHtml: '<h1>Terms & Conditions</h1><p>By using Posttrr, you agree to the following terms.</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 3,
+        seoTitle: 'Terms & Conditions',
+        seoDescription: 'Posttrr\'s terms and conditions.'
+      },
+      {
+        title: 'Contact Us',
+        slug: 'contact-us',
+        contentHtml: '<h1>Contact Us</h1><p>Email: support@posttrr.com</p>',
+        status: 'published',
+        showInFooter: true,
+        footerOrder: 4,
+        seoTitle: 'Contact Posttrr',
+        seoDescription: 'Get in touch with the Posttrr team.'
+      }
     ];
 
     for (const pageData of pagesData) {
-      await Page.findOneAndUpdate({ slug: pageData.slug }, pageData, { upsert: true });
+      await Page.findOneAndUpdate(
+        { slug: pageData.slug },
+        { ...pageData, publishedAt: new Date() },
+        { upsert: true }
+      );
     }
 
     // Seed locations
@@ -223,6 +263,37 @@ export async function seedDatabase() {
         }
       }
     }
+
+    // Seed default FAQs
+    try {
+      const { Faq } = await import('../models/Faq');
+      const existing = await Faq.countDocuments();
+      if (existing === 0) {
+        const faqs = [
+          { question: 'How do I post an ad?', answer: '<p>Go to Post Ad and fill the form.</p>', status: 'active', sortOrder: 1 },
+          { question: 'How do I contact a seller?', answer: '<p>Use the chat feature on listing page.</p>', status: 'active', sortOrder: 2 },
+          { question: 'Is there a listing fee?', answer: '<p>Basic listings are free; premium options available.</p>', status: 'active', sortOrder: 3 },
+          { question: 'How to report a suspicious ad?', answer: '<p>Click Report on the listing and choose a reason.</p>', status: 'active', sortOrder: 4 },
+        ];
+        for (const f of faqs) await Faq.create(f);
+      }
+    } catch {}
+
+    // Seed default Blog post
+    try {
+      const blogCount = await Blog.countDocuments();
+      if (blogCount === 0) {
+        await Blog.create({
+          title: 'Posttrr.com',
+          slug: 'posttrrcom',
+          imageUrl: 'https://picsum.photos/600/400',
+          tags: ['Welcome'],
+          descriptionHtml: '<h1>Welcome to Posttrr</h1><p>Posttrr.com is your marketplace for classifieds. Buy, sell, and connect with your community.</p><p><a href="/listings">Browse listings</a> or <strong>post your ad</strong> now.</p>',
+          status: 'published',
+          publishedAt: new Date(),
+        });
+      }
+    } catch {}
 
     // Seed a homepage banner
     await Banner.findOneAndUpdate(

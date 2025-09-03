@@ -6,10 +6,10 @@ import {
   FileText, 
   Users, 
   Settings, 
-  Tag, 
-  MapPin, 
-  Flag, 
-  Bell, 
+  Tag,
+  MapPin,
+  Flag,
+  Bell,
   BarChart,
   LogOut,
   Home,
@@ -62,6 +62,14 @@ const sidebarItems = [
     ]
   },
   {
+    title: 'Promotional Management',
+    href: '/admin/send-notification',
+    icon: Bell,
+    submenu: [
+      { title: 'Send Notification', href: '/admin/send-notification' }
+    ]
+  },
+  {
     title: 'Ads',
     href: '/admin/ads',
     icon: Tag
@@ -110,6 +118,23 @@ const sidebarItems = [
     title: 'Payment Gateway',
     href: '/admin/payment-gateway',
     icon: CreditCard
+  },
+  {
+    title: 'Settings',
+    href: '/admin/settings',
+    icon: Settings,
+    submenu: [
+      { title: 'Pages', href: '/admin/pages' },
+      { title: 'FAQs', href: '/admin/faqs' }
+    ]
+  },
+  {
+    title: 'Blog Management',
+    href: '/admin/blogs',
+    icon: FileText,
+    submenu: [
+      { title: 'Blogs', href: '/admin/blogs' }
+    ]
   }
 ];
 

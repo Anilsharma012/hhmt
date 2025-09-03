@@ -1,8 +1,21 @@
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 
 export function Footer() {
+  const { data: ver } = useQuery({ queryKey: ['/api/pages/version'] });
+  const { data: footerPages } = useQuery({ queryKey: ['/api/pages', { footer: true, v: (ver as any)?.version || 0 }], enabled: !!ver });
+  const { data: faqsFooter } = useQuery({ queryKey: ['/api/faqs/footer'] });
+  const pathForSlug = (slug: string) => {
+    const map: Record<string, string> = {
+      'about': '/about',
+      'privacy-policy': '/privacy-policy',
+      'terms': '/terms',
+      'contact-us': '/contact-us',
+    };
+    return map[slug] || `/p/${slug}`;
+  };
+
   return (
     <footer className="bg-[#1a365d] text-white mt-12">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,7 +28,7 @@ export function Footer() {
             <p className="text-white/90 text-sm mb-6 leading-relaxed" data-testid="text-footer-description">
               Your trusted marketplace for buying and selling everything from cars to electronics. Connect with millions of buyers and sellers.
             </p>
-            
+
             {/* Social Media */}
             <div className="flex space-x-3">
               <a href="#" className="w-9 h-9 bg-[#4285f4] hover:bg-[#3367d6] rounded-lg flex items-center justify-center transition-colors">
@@ -32,7 +45,7 @@ export function Footer() {
               </a>
             </div>
           </div>
-          
+
           {/* Browse Categories */}
           <div>
             <h3 className="text-white font-semibold mb-4" data-testid="text-footer-categories-title">Browse Categories</h3>
@@ -46,7 +59,7 @@ export function Footer() {
               <li><Link to="/category/electronics" className="hover:text-white transition-colors" data-testid="link-category-electronics">Electronics</Link></li>
             </ul>
           </div>
-          
+
           {/* Trending Searches */}
           <div>
             <h3 className="text-white font-semibold mb-4" data-testid="text-footer-trending-title">Trending Searches</h3>
@@ -58,33 +71,30 @@ export function Footer() {
               <li><a href="#" className="hover:text-white transition-colors">Flat for Sale</a></li>
             </ul>
           </div>
-          
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4" data-testid="text-footer-quicklinks-title">Quick Links</h3>
-            <ul className="space-y-3 text-sm text-white/80">
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">How to sell fast</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Advertise with us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Business Solutions</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Promote your ad</a></li>
-            </ul>
-          </div>
-          
+
           {/* About & Legal */}
           <div>
             <h3 className="text-white font-semibold mb-4" data-testid="text-footer-support-title">About & Legal</h3>
             <ul className="space-y-3 text-sm text-white/80">
-              <li><Link to="/about" className="hover:text-white transition-colors" data-testid="link-about">About Posttrr</Link></li>
-              <li><Link to="/careers" className="hover:text-white transition-colors" data-testid="link-careers">Careers</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors" data-testid="link-contact">Contact us</Link></li>
-              <li><Link to="/privacy" className="hover:text-white transition-colors" data-testid="link-privacy">Privacy policy</Link></li>
-              <li><Link to="/terms" className="hover:text-white transition-colors" data-testid="link-terms">Terms of use</Link></li>
-              <li><Link to="/sitemap" className="hover:text-white transition-colors" data-testid="link-sitemap">Sitemap</Link></li>
+              {((faqsFooter as any)?.data || []).length > 0 && (
+                <li>
+                  <Link to="/faq" className="hover:text-white transition-colors">FAQs</Link>
+                </li>
+              )}
+              <li>
+                <Link to="/blogs" className="hover:text-white transition-colors">Blog</Link>
+              </li>
+              {(footerPages || []).map((p: any) => (
+                <li key={p.slug}>
+                  <Link to={pathForSlug(p.slug)} className="hover:text-white transition-colors">
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-white/20 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between">
           <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-8">
             <p className="text-white/80 text-sm" data-testid="text-footer-copyright">
@@ -101,7 +111,7 @@ export function Footer() {
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <span className="text-white/80 text-sm">Download App:</span>
             <a href="#" className="bg-[#4285f4] hover:bg-[#3367d6] px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">

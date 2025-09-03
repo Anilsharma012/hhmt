@@ -18,6 +18,7 @@ function isNetworkError(error: any): boolean {
 
 function devAuthHeaders() {
   try {
+    if (!import.meta.env.DEV) return {} as Record<string, string>;
     const raw = localStorage.getItem('posttrr_user');
     if (!raw) return {} as Record<string, string>;
     return { 'x-dev-user': raw } as Record<string, string>;

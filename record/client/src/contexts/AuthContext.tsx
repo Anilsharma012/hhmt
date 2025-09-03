@@ -24,6 +24,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      if (!user) return;
+      const { ensureFcmToken } = await import('@/lib/fcm');
+      const t = await ensureFcmToken();
+      if (t) {
+        try {
+          await fetch('/api/devices', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ platform: 'web', fcmToken: t }) });
+          localStorage.setItem('posttrr_fcm_token', t);
+        } catch {}
+      }
+    })();
+  }, [user]);
+
   const persist = (u: User | null) => {
     setUser(u);
     try {
@@ -64,7 +78,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return data.user as User;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const t = localStorage.getItem('posttrr_fcm_token');
+      if (t) {
+        await fetch('/api/devices', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ fcmToken: t }) });
+      }
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch {}
     persist(null);
   };
 

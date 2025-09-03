@@ -7,3 +7,6 @@ export { LocationCity, LocationArea } from './Location';
 export { Order } from './Order';
 export { Report } from './Report';
 export { Analytics } from './Analytics';
+export { DeviceToken } from './DeviceToken';
+export { Notification } from './Notification';
+export { InAppNotification } from './InAppNotification';

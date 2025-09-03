@@ -22,11 +22,15 @@ import { createReport, listReports, updateReport, deleteReport, adminListReportR
 import { trackClick, trackSave, adminAnalytics } from './controllers/analytics';
 import { getDashboardStats, updateListingStatus, adminListListings, adminCreateListing, adminUpdateListing, adminDeleteListing, moderateListing, toggleListingFeatured } from './controllers/admin';
 import { listAdvertisements, patchAdvertisement, deleteAdvertisement } from './controllers/advertisements';
-import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages } from './controllers/pages';
+import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages, adminGetPage } from './controllers/pages';
+import { adminListFaqs, adminCreateFaq, adminUpdateFaq, adminToggleFaq, adminReorderFaqs, adminDeleteFaq, publicListFaqs, publicFooterFaqs, faqsVersion } from './controllers/faqs';
+import { adminListBlogs, adminGetBlog, adminCreateBlog, adminUpdateBlog, adminDeleteBlog, publicListBlogs, publicGetBlogBySlug, blogsVersion } from './controllers/blogs';
 import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
 import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
 import { openThread, listMessages, sendMessage, listThreads, markRead, unreadCount } from './controllers/chats';
+import multer from 'multer';
+import { registerDevice, unregisterDevice, sendAdminNotification, adminListNotifications, adminDeleteNotification, listMyInApp, markInAppRead } from './controllers/notifications';
 
 // Middleware
 import { authenticate, requireAdmin } from './middleware/auth';
@@ -67,14 +71,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/listings', authenticate, createListing);
   app.put('/api/listings/:id', authenticate, updateListing);
   app.delete('/api/listings/:id', authenticate, deleteListing);
+  // Devices & In-app notifications (user)
+  app.post('/api/devices', authenticate, registerDevice);
+  app.delete('/api/devices', authenticate, unregisterDevice);
+  app.get('/api/me/inapp-notifications', authenticate, listMyInApp);
+  app.patch('/api/me/inapp-notifications/:id/read', authenticate, markInAppRead);
 
   // Public pages
   app.get('/api/pages', listPages);
+  app.get('/api/pages/version', async (_req, res) => {
+    const { getVersion } = await import('./utils/cacheVersion');
+    res.json({ version: getVersion('pages') });
+  });
   app.get('/api/pages/:slug', getPageBySlug);
+  app.get('/api/faqs', publicListFaqs);
+  app.get('/api/faqs/footer', publicFooterFaqs);
+  app.get('/api/faqs/version', faqsVersion);
+  // Public blogs
+  app.get('/api/blogs', publicListBlogs);
+  app.get('/api/blogs/version', blogsVersion);
+  app.get('/api/blogs/:slug', publicGetBlogBySlug);
 
   // Admin routes
   app.get('/api/admin/dashboard', authenticate, requireAdmin, getDashboardStats);
   app.get('/api/admin/analytics', authenticate, requireAdmin, adminAnalytics);
+  // Admin notifications
+  app.get('/api/admin/notifications', authenticate, requireAdmin, adminListNotifications);
+  app.post('/api/admin/notifications/send', authenticate, requireAdmin, sendAdminNotification);
+  app.delete('/api/admin/notifications/:id', authenticate, requireAdmin, adminDeleteNotification);
+
+  // File uploads (multer)
+  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 3 * 1024 * 1024 } });
+
+  // Admin: pages
+  app.get('/api/admin/pages', authenticate, requireAdmin, adminListPages);
+  app.get('/api/admin/pages/:id', authenticate, requireAdmin, adminGetPage);
+  app.get('/api/admin/pages/preview-token/new', authenticate, requireAdmin, (await import('./controllers/pages')).getPreviewToken);
+  app.post('/api/admin/pages', authenticate, requireAdmin, createPage);
+  app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
+  app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
+  app.post('/api/admin/uploads', authenticate, requireAdmin, upload.single('file'), (await import('./controllers/uploads')).uploadImage);
+
+  // Admin blogs
+  app.get('/api/admin/blogs', authenticate, requireAdmin, adminListBlogs);
+  app.get('/api/admin/blogs/:id', authenticate, requireAdmin, adminGetBlog);
+  app.post('/api/admin/blogs', authenticate, requireAdmin, adminCreateBlog);
+  app.put('/api/admin/blogs/:id', authenticate, requireAdmin, adminUpdateBlog);
+  app.delete('/api/admin/blogs/:id', authenticate, requireAdmin, adminDeleteBlog);
+
+  // Admin: FAQs
+  app.get('/api/admin/faqs', authenticate, requireAdmin, adminListFaqs);
+  app.post('/api/admin/faqs', authenticate, requireAdmin, adminCreateFaq);
+  app.put('/api/admin/faqs/:id', authenticate, requireAdmin, adminUpdateFaq);
+  app.patch('/api/admin/faqs/:id/toggle', authenticate, requireAdmin, adminToggleFaq);
+  app.patch('/api/admin/faqs/reorder', authenticate, requireAdmin, adminReorderFaqs);
+  app.delete('/api/admin/faqs/:id', authenticate, requireAdmin, adminDeleteFaq);
 
   // Admin: reports & reasons
   app.get('/api/admin/reports', authenticate, requireAdmin, listReports);
@@ -109,11 +160,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/admin/subcategories/:id', authenticate, requireAdmin, updateSubcategory);
   app.delete('/api/admin/subcategories/:id', authenticate, requireAdmin, deleteSubcategory);
 
-  // Admin: pages
-  app.get('/api/admin/pages', authenticate, requireAdmin, adminListPages);
-  app.post('/api/admin/pages', authenticate, requireAdmin, createPage);
-  app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
-  app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
 
   // Admin: locations
   app.get('/api/admin/locations/cities', authenticate, requireAdmin, adminGetCities);
