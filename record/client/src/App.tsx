@@ -70,10 +70,10 @@ function Router() {
       {/* CMS pages */}
       <Route path="/p/:slug" component={CmsPage} />
       {/* Public pages mapped to CMS slugs */}
-      <Route path="/about" component={() => <CmsPage />} />
-      <Route path="/privacy-policy" component={() => <CmsPage />} />
-      <Route path="/terms" component={() => <CmsPage />} />
-      <Route path="/contact-us" component={() => <CmsPage />} />
+      <Route path="/about" component={() => <Redirect to="/p/about" />} />
+      <Route path="/privacy-policy" component={() => <Redirect to="/p/privacy-policy" />} />
+      <Route path="/terms" component={() => <Redirect to="/p/terms" />} />
+      <Route path="/contact-us" component={() => <Redirect to="/p/contact-us" />} />
       {/* Other static pages (legacy) */}
       <Route path="/blog" component={Blog} />
       <Route path="/faq" component={FAQ} />
