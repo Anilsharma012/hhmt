@@ -29,6 +29,7 @@ import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
 import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
 import { openThread, listMessages, sendMessage, listThreads, markRead, unreadCount } from './controllers/chats';
+import { registerDevice, unregisterDevice, sendAdminNotification, adminListNotifications, adminDeleteNotification, listMyInApp, markInAppRead } from './controllers/notifications';
 
 // Middleware
 import { authenticate, requireAdmin } from './middleware/auth';
@@ -69,6 +70,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/listings', authenticate, createListing);
   app.put('/api/listings/:id', authenticate, updateListing);
   app.delete('/api/listings/:id', authenticate, deleteListing);
+  // Devices & In-app notifications (user)
+  app.post('/api/devices', authenticate, registerDevice);
+  app.delete('/api/devices', authenticate, unregisterDevice);
+  app.get('/api/me/inapp-notifications', authenticate, listMyInApp);
+  app.patch('/api/me/inapp-notifications/:id/read', authenticate, markInAppRead);
 
   // Public pages
   app.get('/api/pages', listPages);
@@ -88,6 +94,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin routes
   app.get('/api/admin/dashboard', authenticate, requireAdmin, getDashboardStats);
   app.get('/api/admin/analytics', authenticate, requireAdmin, adminAnalytics);
+  // Admin notifications
+  app.get('/api/admin/notifications', authenticate, requireAdmin, adminListNotifications);
+  app.post('/api/admin/notifications/send', authenticate, requireAdmin, sendAdminNotification);
+  app.delete('/api/admin/notifications/:id', authenticate, requireAdmin, adminDeleteNotification);
 
   // Admin: pages
   app.get('/api/admin/pages', authenticate, requireAdmin, adminListPages);
