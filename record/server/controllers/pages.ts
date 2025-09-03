@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { Page } from '../models/Page';
 import { AuthRequest } from '../middleware/auth';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
 
 export const listPages = async (req: Request, res: Response) => {
   try {
@@ -21,6 +24,7 @@ export const listPages = async (req: Request, res: Response) => {
 export const adminListPages = async (req: Request, res: Response) => {
   try {
     const q = String((req.query.q as string) || '').trim();
+    const status = String((req.query.status as string) || '').trim();
     const page = Math.max(parseInt(String(req.query.page || '1'), 10) || 1, 1);
     const limit = Math.min(Math.max(parseInt(String(req.query.limit || '20'), 10) || 20, 1), 100);
     const filter: any = {};
@@ -29,6 +33,9 @@ export const adminListPages = async (req: Request, res: Response) => {
         { title: { $regex: q, $options: 'i' } },
         { slug: { $regex: q, $options: 'i' } },
       ];
+    }
+    if (status === 'draft' || status === 'published') {
+      filter.status = status;
     }
     const total = await Page.countDocuments(filter);
     const items = await Page.find(filter)
@@ -55,6 +62,20 @@ export const adminGetPage = async (req: Request, res: Response) => {
 export const getPageBySlug = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
+    const isPreview = String(req.query.preview || '') === '1';
+    const token = String(req.query.token || '');
+
+    if (isPreview && token) {
+      try {
+        const payload = jwt.verify(token, JWT_SECRET) as any;
+        if (payload && payload.scope === 'page-preview') {
+          const page = await Page.findOne({ slug });
+          if (!page) return res.status(404).json({ message: 'Page not found' });
+          return res.json(page);
+        }
+      } catch {}
+    }
+
     const page = await Page.findOne({ slug, status: 'published' });
     if (!page) return res.status(404).json({ message: 'Page not found' });
     return res.json(page);
@@ -172,5 +193,14 @@ export const deletePage = async (req: AuthRequest, res: Response) => {
     return res.json({ ok: true, data: { deleted: true } });
   } catch (e: any) {
     return res.status(500).json({ ok: false, message: e?.message || 'Failed to delete page' });
+  }
+};
+
+export const getPreviewToken = async (_req: AuthRequest, res: Response) => {
+  try {
+    const token = jwt.sign({ scope: 'page-preview' }, JWT_SECRET, { expiresIn: '10m' });
+    return res.json({ ok: true, token });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, message: 'Failed to issue preview token' });
   }
 };
