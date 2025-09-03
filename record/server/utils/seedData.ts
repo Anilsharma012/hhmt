@@ -3,6 +3,7 @@ import { User } from '../models/User';
 import { Package } from '../models/Package';
 import { Page } from '../models/Page';
 import { Banner } from '../models/Banner';
+import { Blog } from '../models/Blog';
 
 export async function seedDatabase() {
   try {
