@@ -79,7 +79,8 @@ function Router() {
       <Route path="/terms" component={() => <Redirect to="/p/terms" />} />
       <Route path="/contact-us" component={() => <Redirect to="/p/contact-us" />} />
       {/* Other static pages (legacy) */}
-      <Route path="/blog" component={Blog} />
+      <Route path="/blogs" component={Blogs} />
+      <Route path="/blog/:slug" component={BlogDetail} />
       <Route path="/faq" component={FAQ} />
       <Route path="/careers" component={Careers} />
       <Route path="/help" component={Help} />
@@ -104,6 +105,7 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/pages" component={AdminPages} />
       <Route path="/admin/faqs" component={AdminFaqs} />
+      <Route path="/admin/blogs" component={AdminBlogs} />
       <Route path="/admin/packages" component={AdminPackages} />
       <Route path="/admin/packages/listing" component={AdminListingPackages} />
       <Route path="/admin/packages/featured" component={AdminFeaturedPackages} />
