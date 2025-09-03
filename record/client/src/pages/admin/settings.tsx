@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useLocation } from 'wouter';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
-import TinyEditor from '@/components/admin/TinyEditor';
+import RichEditor from '@/components/admin/RichEditor';
 
 export default function AdminSettings() {
   const { user } = useAuth();
