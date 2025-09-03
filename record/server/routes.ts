@@ -116,11 +116,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/admin/subcategories/:id', authenticate, requireAdmin, updateSubcategory);
   app.delete('/api/admin/subcategories/:id', authenticate, requireAdmin, deleteSubcategory);
 
-  // Admin: pages
-  app.get('/api/admin/pages', authenticate, requireAdmin, adminListPages);
-  app.post('/api/admin/pages', authenticate, requireAdmin, createPage);
-  app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
-  app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
 
   // Admin: locations
   app.get('/api/admin/locations/cities', authenticate, requireAdmin, adminGetCities);
