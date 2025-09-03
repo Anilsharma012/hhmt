@@ -100,6 +100,7 @@ function Router() {
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/pages" component={AdminPages} />
+      <Route path="/admin/faqs" component={AdminFaqs} />
       <Route path="/admin/packages" component={AdminPackages} />
       <Route path="/admin/packages/listing" component={AdminListingPackages} />
       <Route path="/admin/packages/featured" component={AdminFeaturedPackages} />
