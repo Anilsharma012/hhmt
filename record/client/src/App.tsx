@@ -117,6 +117,7 @@ function Router() {
       <Route path="/admin/payment-gateway" component={AdminPaymentGateway} />
       <Route path="/admin/customers" component={AdminCustomers} />
       <Route path="/admin/custom-fields" component={AdminCustomFields} />
+      <Route path="/admin/send-notification" component={AdminSendNotification} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={ChatThreadPage} />
