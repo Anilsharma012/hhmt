@@ -11,7 +11,9 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 async function uploadImage(file: File): Promise<string> {
   const fd = new FormData();
   fd.append('file', file, file.name);
-  const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd, credentials: 'include' });
+  const headers: Record<string,string> = {};
+  try { const raw = localStorage.getItem('posttrr_user'); if (raw) headers['x-dev-user'] = raw; } catch {}
+  const res = await fetch('/api/admin/uploads', { method: 'POST', body: fd, credentials: 'include', headers });
   if (!res.ok) throw new Error('Upload failed: ' + res.status);
   const ct = res.headers.get('content-type') || '';
   if (!ct.includes('application/json')) throw new Error('Expected JSON');
