@@ -23,6 +23,7 @@ import { trackClick, trackSave, adminAnalytics } from './controllers/analytics';
 import { getDashboardStats, updateListingStatus, adminListListings, adminCreateListing, adminUpdateListing, adminDeleteListing, moderateListing, toggleListingFeatured } from './controllers/admin';
 import { listAdvertisements, patchAdvertisement, deleteAdvertisement } from './controllers/advertisements';
 import { listPages, getPageBySlug, createPage, updatePage, deletePage, adminListPages, adminGetPage } from './controllers/pages';
+import { adminListFaqs, adminCreateFaq, adminUpdateFaq, adminToggleFaq, adminReorderFaqs, adminDeleteFaq, publicListFaqs, publicFooterFaqs, faqsVersion } from './controllers/faqs';
 import { checkout, webhook } from './controllers/orders';
 import { listBanners, adminListBanners, createBanner, updateBanner, deleteBanner } from './controllers/banners';
 import { adminListUsers, adminUpdateUser, adminCreateUser, adminDeleteUser, adminResetPassword, adminListUserAds } from './controllers/users';
@@ -75,6 +76,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ version: getVersion('pages') });
   });
   app.get('/api/pages/:slug', getPageBySlug);
+  app.get('/api/faqs', publicListFaqs);
+  app.get('/api/faqs/footer', publicFooterFaqs);
+  app.get('/api/faqs/version', faqsVersion);
 
   // Admin routes
   app.get('/api/admin/dashboard', authenticate, requireAdmin, getDashboardStats);
@@ -88,6 +92,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/admin/pages/:id', authenticate, requireAdmin, updatePage);
   app.delete('/api/admin/pages/:id', authenticate, requireAdmin, deletePage);
   app.post('/api/admin/uploads', authenticate, requireAdmin, (await import('./controllers/uploads')).uploadImage);
+
+  // Admin: FAQs
+  app.get('/api/admin/faqs', authenticate, requireAdmin, adminListFaqs);
+  app.post('/api/admin/faqs', authenticate, requireAdmin, adminCreateFaq);
+  app.put('/api/admin/faqs/:id', authenticate, requireAdmin, adminUpdateFaq);
+  app.patch('/api/admin/faqs/:id/toggle', authenticate, requireAdmin, adminToggleFaq);
+  app.patch('/api/admin/faqs/reorder', authenticate, requireAdmin, adminReorderFaqs);
+  app.delete('/api/admin/faqs/:id', authenticate, requireAdmin, adminDeleteFaq);
 
   // Admin: reports & reasons
   app.get('/api/admin/reports', authenticate, requireAdmin, listReports);
