@@ -4,6 +4,7 @@ import { Package } from '../models/Package';
 import { Page } from '../models/Page';
 import { Banner } from '../models/Banner';
 import { Blog } from '../models/Blog';
+import { Category, Subcategory } from '../models/Category';
 
 export async function seedDatabase() {
   try {
